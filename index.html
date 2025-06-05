@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eid Mubarak Greetings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e2a78 0%, #ff8c42 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .eid-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin: 0 auto 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { transform: scale(0.98); }
+            to { transform: scale(1.02); }
+        }
+        
+        .greeting-text {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, #ffd700, #ff8c42, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 5px rgba(255, 215, 0, 0.3); }
+            to { text-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.4); }
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff8c42, #ffd700);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 250px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(255, 140, 66, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            outline: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 140, 66, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover:after {
+            left: 100%;
+        }
+        
+        .whatsapp-btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .custom-message {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease-in-out;
+            display: none;
+        }
+        
+        .audio-controls {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .audio-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .audio-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://i.postimg.cc/hjrJmf3G/New-Project-4-7-A93407.gif" alt="Eid Mubarak" class="eid-image">
+        
+        <h1 class="greeting-text">✨ Eid Mubarak! May this Eid bring joy, peace, and prosperity to all! ✨</h1>
+        
+        <div class="input-group">
+            <input type="text" id="nameInput" placeholder="Enter your name">
+        </div>
+        
+        <button class="btn" id="generateBtn">Generate Eid Wish</button>
+        
+        <div class="custom-message" id="customMessage"></div>
+        
+        <button class="btn whatsapp-btn" id="shareBtn" style="display: none;">
+            <i class="fab fa-whatsapp"></i> Share on WhatsApp
+        </button>
+        
+        <div class="audio-controls">
+            <button class="audio-btn" id="muteBtn">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <span>Background Music</span>
+        </div>
+    </div>
+    
+    <audio id="bgAudio" loop autoplay>
+        <source src="https://files.catbox.moe/krwrh3.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bgAudio = document.getElementById('bgAudio');
+            const muteBtn = document.getElementById('muteBtn');
+            const generateBtn = document.getElementById('generateBtn');
+            const nameInput = document.getElementById('nameInput');
+            const customMessage = document.getElementById('customMessage');
+            const shareBtn = document.getElementById('shareBtn');
+            
+            // Try to play audio (many browsers block autoplay)
+            function playAudio() {
+                bgAudio.volume = 0.3;
+                const promise = bgAudio.play();
+                
+                if (promise !== undefined) {
+                    promise.catch(error => {
+                        // Auto-play was prevented, show mute button
+                        bgAudio.muted = true;
+                        muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    });
+                }
+            }
+            
+            // Initial audio play attempt
+            playAudio();
+            
+            // Mute/unmute toggle
+            muteBtn.addEventListener('click', function() {
+                bgAudio.muted = !bgAudio.muted;
+                if (bgAudio.muted) {
+                    muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                } else {
+                    muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    playAudio();
+                }
+            });
+            
+            // Generate custom message
+            generateBtn.addEventListener('click', function() {
+                const name = nameInput.value.trim();
+                
+                if (name === '') {
+                    customMessage.textContent = 'Please enter your name first!';
+                    customMessage.style.display = 'block';
+                    shareBtn.style.display = 'none';
+                    return;
+                }
+                
+                const messages = [
+                    `Eid Mubarak from ${name}! 🎉 Wishing you happiness and blessings!`,
+                    `Happy Eid ${name}! May your days be filled with joy and peace.`,
+                    `${name} wishes you a blessed Eid filled with love and prosperity! ✨`,
+                    `Eid Mubarak! ${name} sends you warm wishes for a wonderful celebration.`,
+                    `From ${name} to you: May this Eid bring countless blessings! 🌙`
+                ];
+                
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                customMessage.textContent = randomMessage;
+                customMessage.style.display = 'block';
+                shareBtn.style.display = 'flex';
+                
+                // Scroll to message
+                customMessage.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // WhatsApp share
+            shareBtn.addEventListener('click', function() {
+                const message = `${customMessage.textContent}\n\nSend your own Eid wishes: ${window.location.href}`;
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+            });
+        });
+    </script>
+</body>
+</html>
