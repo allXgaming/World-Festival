@@ -132,36 +132,12 @@
             transform: translateY(1px);
         }
         
-        .btn:after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-        
-        .btn:hover:after {
-            left: 100%;
-        }
-        
         .whatsapp-btn {
             background: linear-gradient(45deg, #25D366, #128C7E);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-        }
-        
-        .custom-message {
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            animation: fadeIn 0.5s ease-in-out;
-            display: none;
         }
         
         .audio-controls {
@@ -189,109 +165,203 @@
         .audio-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
+        
+        /* Receiver view styles */
+        .hidden {
+            display: none;
+        }
+        
+        .sender-name {
+            color: #ffd700;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #ff8c42;
+            opacity: 0.8;
+            animation: fall linear forwards;
+            z-index: -1;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://i.postimg.cc/hjrJmf3G/New-Project-4-7-A93407.gif" alt="Eid Mubarak" class="eid-image">
-        
-        <h1 class="greeting-text">✨ Eid Mubarak! May this Eid bring joy, peace, and prosperity to all! ✨</h1>
-        
-        <div class="input-group">
-            <input type="text" id="nameInput" placeholder="Enter your name">
+        <!-- Sender View -->
+        <div id="sender-view">
+            <img src="https://i.postimg.cc/hjrJmf3G/New-Project-4-7-A93407.gif" alt="Eid Mubarak" class="eid-image">
+            
+            <h1 class="greeting-text">✨ Eid Mubarak! May this Eid bring joy, peace, and prosperity to all! ✨</h1>
+            
+            <div class="input-group">
+                <input type="text" id="nameInput" placeholder="Enter your name">
+            </div>
+            
+            <button class="btn whatsapp-btn" id="shareBtn">
+                <i class="fab fa-whatsapp"></i> Share on WhatsApp
+            </button>
+            
+            <div class="audio-controls">
+                <button class="audio-btn" id="muteBtn">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                <span>Background Music</span>
+            </div>
         </div>
         
-        <button class="btn" id="generateBtn">Generate Eid Wish</button>
-        
-        <div class="custom-message" id="customMessage"></div>
-        
-        <button class="btn whatsapp-btn" id="shareBtn" style="display: none;">
-            <i class="fab fa-whatsapp"></i> Share on WhatsApp
-        </button>
-        
-        <div class="audio-controls">
-            <button class="audio-btn" id="muteBtn">
-                <i class="fas fa-volume-up"></i>
+        <!-- Receiver View -->
+        <div id="receiver-view" class="hidden">
+            <img src="https://i.postimg.cc/hjrJmf3G/New-Project-4-7-A93407.gif" alt="Eid Mubarak" class="eid-image">
+            
+            <div id="received-greeting" class="greeting-text">
+                ✨ Eid Mubarak from <span id="sender-name-display" class="sender-name"></span>! ✨
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="receiver-name" placeholder="Enter your name to reply">
+            </div>
+            
+            <button class="btn whatsapp-btn" id="reply-share-btn">
+                <i class="fab fa-whatsapp"></i> Reply via WhatsApp
             </button>
-            <span>Background Music</span>
         </div>
     </div>
     
-    <audio id="bgAudio" loop autoplay>
+    <audio id="bgAudio" loop>
         <source src="https://files.catbox.moe/krwrh3.mp3" type="audio/mpeg">
     </audio>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
             const bgAudio = document.getElementById('bgAudio');
             const muteBtn = document.getElementById('muteBtn');
-            const generateBtn = document.getElementById('generateBtn');
             const nameInput = document.getElementById('nameInput');
-            const customMessage = document.getElementById('customMessage');
             const shareBtn = document.getElementById('shareBtn');
+            const senderView = document.getElementById('sender-view');
+            const receiverView = document.getElementById('receiver-view');
+            const senderNameDisplay = document.getElementById('sender-name-display');
+            const receiverNameInput = document.getElementById('receiver-name');
+            const replyShareBtn = document.getElementById('reply-share-btn');
             
-            // Try to play audio (many browsers block autoplay)
-            function playAudio() {
+            // Check URL for sender parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const senderName = urlParams.get('from');
+            
+            // Audio control
+            function initAudio() {
                 bgAudio.volume = 0.3;
-                const promise = bgAudio.play();
-                
-                if (promise !== undefined) {
-                    promise.catch(error => {
-                        // Auto-play was prevented, show mute button
-                        bgAudio.muted = true;
-                        muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                    });
-                }
+                bgAudio.play().catch(e => {
+                    bgAudio.muted = true;
+                    muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                });
             }
             
-            // Initial audio play attempt
-            playAudio();
-            
-            // Mute/unmute toggle
             muteBtn.addEventListener('click', function() {
                 bgAudio.muted = !bgAudio.muted;
-                if (bgAudio.muted) {
-                    muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                } else {
-                    muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                    playAudio();
-                }
+                muteBtn.innerHTML = bgAudio.muted ? 
+                    '<i class="fas fa-volume-mute"></i>' : 
+                    '<i class="fas fa-volume-up"></i>';
             });
             
-            // Generate custom message
-            generateBtn.addEventListener('click', function() {
-                const name = nameInput.value.trim();
+            // Confetti system (optimized)
+            function createConfetti() {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.width = (8 + Math.random() * 8) + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.backgroundColor = `hsl(${Math.random() * 60 + 20}, 100%, 50%)`;
+                confetti.style.animationDuration = (2 + Math.random() * 3) + 's';
+                document.body.appendChild(confetti);
                 
-                if (name === '') {
-                    customMessage.textContent = 'Please enter your name first!';
-                    customMessage.style.display = 'block';
-                    shareBtn.style.display = 'none';
+                // Auto remove after animation
+                setTimeout(() => confetti.remove(), 5000);
+            }
+            
+            // Check if this is a receiver view
+            if (senderName) {
+                senderView.style.display = 'none';
+                receiverView.classList.remove('hidden');
+                senderNameDisplay.textContent = decodeURIComponent(senderName);
+                
+                // Add confetti for receiver view
+                const confettiInterval = setInterval(createConfetti, 150);
+                setTimeout(() => clearInterval(confettiInterval), 5000);
+            } else {
+                initAudio();
+                
+                // Direct WhatsApp share for sender
+                shareBtn.addEventListener('click', function() {
+                    const name = nameInput.value.trim();
+                    if (!name) {
+                        alert('Please enter your name');
+                        return;
+                    }
+                    
+                    const messages = [
+                        `Eid Mubarak from ${name}! 🎉 Wishing you happiness and blessings!`,
+                        `Happy Eid from ${name}! May your days be filled with joy and peace.`,
+                        `${name} wishes you a blessed Eid filled with love and prosperity! ✨`,
+                        `Eid Mubarak! ${name} sends you warm wishes for a wonderful celebration.`,
+                        `From ${name} to you: May this Eid bring countless blessings! 🌙`
+                    ];
+                    
+                    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                    const shareUrl = `${window.location.origin}${window.location.pathname}?from=${encodeURIComponent(name)}`;
+                    const shareText = `${randomMessage}\n\nSend your own Eid wishes: ${shareUrl}`;
+                    
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'Eid Mubarak Greetings',
+                            text: shareText,
+                            url: shareUrl
+                        }).catch(() => {
+                            window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
+                        });
+                    } else {
+                        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
+                    }
+                });
+            }
+            
+            // Reply share button for receiver view
+            replyShareBtn.addEventListener('click', function() {
+                const receiverName = receiverNameInput.value.trim();
+                if (!receiverName) {
+                    alert('Please enter your name');
                     return;
                 }
                 
-                const messages = [
-                    `Eid Mubarak from ${name}! 🎉 Wishing you happiness and blessings!`,
-                    `Happy Eid ${name}! May your days be filled with joy and peace.`,
-                    `${name} wishes you a blessed Eid filled with love and prosperity! ✨`,
-                    `Eid Mubarak! ${name} sends you warm wishes for a wonderful celebration.`,
-                    `From ${name} to you: May this Eid bring countless blessings! 🌙`
-                ];
+                const shareUrl = `${window.location.origin}${window.location.pathname}?from=${encodeURIComponent(receiverName)}`;
+                const shareText = `Eid Mubarak ${senderNameDisplay.textContent}! 🎉\n\n${receiverName} has sent you Eid greetings!\nClick to view: ${shareUrl}`;
                 
-                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-                customMessage.textContent = randomMessage;
-                customMessage.style.display = 'block';
-                shareBtn.style.display = 'flex';
-                
-                // Scroll to message
-                customMessage.scrollIntoView({ behavior: 'smooth' });
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Eid Mubarak Greetings',
+                        text: shareText,
+                        url: shareUrl
+                    }).catch(() => {
+                        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
+                    });
+                } else {
+                    window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
+                }
             });
             
-            // WhatsApp share
-            shareBtn.addEventListener('click', function() {
-                const message = `${customMessage.textContent}\n\nSend your own Eid wishes: ${window.location.href}`;
-                const encodedMessage = encodeURIComponent(message);
-                window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
-            });
+            // Occasional confetti for sender view
+            if (!senderName) {
+                setInterval(createConfetti, 300);
+            }
         });
     </script>
 </body>
