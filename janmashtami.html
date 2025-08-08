@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Janmashtami</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-blue: #1a237e;
+            --navy-blue: #0d47a1;
+            --gold: #ffd700;
+            --light-gold: #fff9c4;
+            --light-blue: #4fc3f7;
+            --white: #ffffff;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--deep-blue), var(--navy-blue));
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin: 20px 0;
+            text-shadow: 0 0 10px var(--gold), 0 0 20px var(--light-blue);
+            animation: blink 2s infinite alternate;
+        }
+        
+        .image-container {
+            margin: 30px auto;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            animation: pulse 2s infinite;
+            border: 5px solid var(--gold);
+            position: relative;
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .message-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .sender-name {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--gold);
+            font-weight: 700;
+            animation: glow 2s infinite alternate;
+        }
+        
+        .message {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .input-container {
+            margin: 20px 0;
+            display: none;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid var(--gold);
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 15px 10px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .gift-btn {
+            background: linear-gradient(45deg, var(--gold), var(--light-gold));
+            color: var(--deep-blue);
+        }
+        
+        .gift-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .whatsapp-btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+        }
+        
+        .arrow {
+            display: inline-block;
+            margin-left: 5px;
+            animation: bounce 1s infinite alternate;
+        }
+        
+        /* Background elements */
+        .feather {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234fc3f7"><path d="M22 12V15C22 15 20 18 12 18C4 18 2 15 2 15V12C2 12 4 9 12 9C20 9 22 12 22 12Z" /></svg>');
+            background-size: contain;
+            opacity: 0.7;
+            z-index: 1;
+            animation: float 15s linear infinite;
+        }
+        
+        .butterfly {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffd700"><path d="M20 12C20 8.69 16.42 6 12 6C7.58 6 4 8.69 4 12C4 15.31 7.58 18 12 18C16.42 18 20 15.31 20 12Z" /></svg>');
+            background-size: contain;
+            opacity: 0.6;
+            z-index: 1;
+            animation: fall 10s linear infinite;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--light-blue);
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 1;
+            animation: sparkle 3s infinite;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--gold);
+            opacity: 0.8;
+            z-index: 1;
+            animation: confetti-fall 5s linear infinite;
+        }
+        
+        /* Animations */
+        @keyframes blink {
+            0% { text-shadow: 0 0 10px var(--gold), 0 0 20px var(--light-blue); }
+            100% { text-shadow: 0 0 20px var(--gold), 0 0 40px var(--light-blue); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px var(--gold); }
+            100% { text-shadow: 0 0 15px var(--gold), 0 0 20px var(--light-blue); }
+        }
+        
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .image-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .sender-name {
+                font-size: 1.5rem;
+            }
+            
+            .message {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .image-container {
+                width: 180px;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Happy Janmashtami</h1>
+        
+        <div class="image-container">
+            <img src="https://i.postimg.cc/6Q1L2JBJ/giphy.gif" alt="Lord Krishna playing flute">
+        </div>
+        
+        <div class="message-box">
+            <div class="sender-name" id="display-name">Someone</div>
+            <div class="message" id="display-message">Wishing you a joyful Janmashtami!</div>
+        </div>
+        
+        <div class="input-container" id="input-container">
+            <input type="text" id="name-input" placeholder="Your name">
+            <textarea id="message-input" placeholder="Your Janmashtami message"></textarea>
+        </div>
+        
+        <div class="button-container">
+            <a href="https://fkrtt.in/en/BjDU6q" class="btn gift-btn">Open Janmashtami Gift <span class="arrow">👇</span></a>
+            <button class="btn whatsapp-btn" id="whatsapp-share">Share via WhatsApp</button>
+        </div>
+    </div>
+    
+    <audio id="bg-music" loop>
+        <source src="https://files.catbox.moe/nwljnb.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Parse URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const nameParam = urlParams.get('name');
+            const msgParam = urlParams.get('msg');
+            
+            // Get DOM elements
+            const displayName = document.getElementById('display-name');
+            const displayMessage = document.getElementById('display-message');
+            const inputContainer = document.getElementById('input-container');
+            const nameInput = document.getElementById('name-input');
+            const messageInput = document.getElementById('message-input');
+            const whatsappBtn = document.getElementById('whatsapp-share');
+            const bgMusic = document.getElementById('bg-music');
+            
+            // Set initial values from URL or defaults
+            if (nameParam || msgParam) {
+                displayName.textContent = nameParam || 'Someone';
+                displayMessage.textContent = msgParam || 'Wishing you a joyful Janmashtami!';
+                inputContainer.style.display = 'none';
+            } else {
+                inputContainer.style.display = 'block';
+            }
+            
+            // Update display and URL when inputs change
+            function updateGreeting() {
+                const name = nameInput.value.trim() || 'Someone';
+                const message = messageInput.value.trim() || 'Wishing you a joyful Janmashtami!';
+                
+                displayName.textContent = name;
+                displayMessage.textContent = message;
+                
+                // Update URL without reload
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set('name', name);
+                newUrl.searchParams.set('msg', message);
+                history.pushState({}, '', newUrl);
+            }
+            
+            nameInput.addEventListener('input', updateGreeting);
+            messageInput.addEventListener('input', updateGreeting);
+            
+            // WhatsApp share functionality
+            whatsappBtn.addEventListener('click', function() {
+                const name = displayName.textContent;
+                const message = displayMessage.textContent;
+                const shareText = `${name} ki taraf se: ${message}\n\n${window.location.href}`;
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // Background music with interaction requirement
+            function handleUserInteraction() {
+                if (bgMusic.paused) {
+                    bgMusic.play().catch(e => console.log('Audio play failed:', e));
+                    document.removeEventListener('click', handleUserInteraction);
+                    document.removeEventListener('scroll', handleUserInteraction);
+                    document.removeEventListener('touchstart', handleUserInteraction);
+                }
+            }
+            
+            document.addEventListener('click', handleUserInteraction);
+            document.addEventListener('scroll', handleUserInteraction);
+            document.addEventListener('touchstart', handleUserInteraction);
+            
+            // Retry music if it fails
+            bgMusic.addEventListener('ended', function() {
+                bgMusic.currentTime = 0;
+                bgMusic.play().catch(e => console.log('Audio replay failed:', e));
+            });
+            
+            // Create decorative elements
+            function createFeathers() {
+                for (let i = 0; i < 10; i++) {
+                    createElement('feather', 15);
+                }
+            }
+            
+            function createButterflies() {
+                for (let i = 0; i < 15; i++) {
+                    createElement('butterfly', 10);
+                }
+            }
+            
+            function createSparkles() {
+                for (let i = 0; i < 20; i++) {
+                    createElement('sparkle', 5);
+                }
+            }
+            
+            function createConfetti() {
+                for (let i = 0; i < 30; i++) {
+                    createElement('confetti', 8);
+                }
+            }
+            
+            function createElement(className, delayMultiplier) {
+                const element = document.createElement('div');
+                element.className = className;
+                
+                // Random position
+                const left = Math.random() * 100;
+                element.style.left = `${left}vw`;
+                
+                // Random delay
+                const delay = Math.random() * delayMultiplier;
+                element.style.animationDelay = `${delay}s`;
+                
+                // Random size variation
+                if (className === 'feather' || className === 'butterfly') {
+                    const size = 20 + Math.random() * 30;
+                    element.style.width = `${size}px`;
+                    element.style.height = `${size}px`;
+                }
+                
+                // Random color for confetti
+                if (className === 'confetti') {
+                    const colors = ['#ffd700', '#4fc3f7', '#ff4081', '#76ff03'];
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    element.style.backgroundColor = randomColor;
+                    
+                    // Random shape
+                    if (Math.random() > 0.5) {
+                        element.style.borderRadius = '50%';
+                    }
+                }
+                
+                document.body.appendChild(element);
+            }
+            
+            // Initialize decorative elements
+            createFeathers();
+            createButterflies();
+            createSparkles();
+            createConfetti();
+        });
+    </script>
+</body>
+<script async="async" data-cfasync="false" src="//breakdowninsinuateeliza.com/16e760128b8a492881b23188e0e0a0c2/invoke.js"></script>
+<div id="container-16e760128b8a492881b23188e0e0a0c2"></div>
+</html>
+<script type="text/javascript">
+	atOptions = {
+		'key' : 'a07a39e10a3bd9f27ae52751e4f94e88',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//breakdowninsinuateeliza.com/a07a39e10a3bd9f27ae52751e4f94e88/invoke.js"></script>
