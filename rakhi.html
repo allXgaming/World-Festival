@@ -21,12 +21,10 @@
         .whatsapp-button { display: flex; align-items: center; justify-content: center; background: #25D366; color: white; padding: 12px 25px; margin: 15px 0; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: all 0.3s; }
         .whatsapp-button:hover { background: #128C7E; transform: scale(1.05); }
         .whatsapp-button::before { content: ""; display: inline-block; width: 24px; height: 24px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/%3E%3C/svg%3E"); background-size: contain; margin-right: 10px; }
-        /* Animations */
+        /* Animations & Responsive styles are omitted for brevity, but they are the same as before */
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } } @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } } @keyframes glow { 0% { text-shadow: 0 0 5px cyan, 0 0 10px cyan; } 100% { text-shadow: 0 0 10px gold, 0 0 20px gold; } } @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        /* Floating elements */
         .balloon { position: absolute; width: 40px; height: 60px; background: rgba(255, 255, 255, 0.7); border-radius: 50%; filter: blur(1px); animation: float 8s infinite ease-in-out; z-index: -1; } .flower { position: absolute; font-size: 1.5rem; animation: fall linear infinite; z-index: -1; } .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; animation: confetti-fall 3s linear infinite; z-index: -1; } .sparkle { position: absolute; width: 5px; height: 5px; background-color: #fff; border-radius: 50%; filter: blur(1px); opacity: 0; animation: sparkle 2s infinite; z-index: -1; }
         @keyframes float { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-100px) rotate(180deg); } 100% { transform: translateY(0) rotate(360deg); } } @keyframes fall { to { transform: translateY(100vh); } } @keyframes confetti-fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } } @keyframes sparkle { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
-        /* Responsive */
         @media (max-width: 768px) { h1 { font-size: 1.8rem; } .rakhi-img { width: 150px; height: 150px; } .sender-name { font-size: 1.5rem; } .message { font-size: 1rem; } }
     </style>
 </head>
@@ -54,7 +52,7 @@
         class GreetingSystem {
             constructor() {
                 this.initElements();
-                this.initStateFromUrl();
+                this.initializePage();
                 this.setupEventListeners();
                 this.initMusic();
             }
@@ -68,25 +66,20 @@
                 this.bgMusic = document.getElementById('bgMusic');
             }
 
-            initStateFromUrl() {
+            initializePage() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const urlName = urlParams.get('name');
                 const urlMsg = urlParams.get('msg');
 
-                // প্রদর্শনের জন্য নাম ও বার্তা সেট করা
-                const displayName = urlName || 'Someone';
-                const displayMsg = urlMsg || 'aapko Raksha Bandhan ki bahut bahut badhai';
-
-                this.nameDisplay.textContent = displayName + ' ki taraf se:';
-                this.messageDisplay.textContent = displayMsg;
-
-                // ইনপুট বক্স দুটিকে URL থেকে পাওয়া তথ্য দিয়ে ভর্তি করা
-                // যাতে ব্যবহারকারী এডিট করতে পারে
                 if (urlName) {
-                    this.nameInput.value = urlName;
-                }
-                if (urlMsg) {
-                    this.messageInput.value = urlMsg;
+                    // যদি URL-এ নাম থাকে, তবে প্রেরকের বার্তাটি উপরে দেখাও
+                    this.nameDisplay.textContent = urlName + ' ki taraf se:';
+                    this.messageDisplay.textContent = urlMsg || 'aapko Raksha Bandhan ki bahut bahut badhai';
+                    // ইনপুট বক্স খালি থাকবে, যাতে নতুন ব্যবহারকারী নিজের বার্তা লিখতে পারে
+                } else {
+                    // যদি URL-এ কিছু না থাকে (অর্থাৎ নতুন করে পেজ খোলা হয়েছে)
+                    this.nameDisplay.textContent = 'Someone ki taraf se:';
+                    this.messageDisplay.textContent = 'aapko Raksha Bandhan ki bahut bahut badhai';
                 }
             }
 
@@ -100,7 +93,7 @@
             }
 
             handleInputChange() {
-                // যখন ব্যবহারকারী নতুন করে কিছু লিখবে, তখন প্রদর্শনের বার্তা পরিবর্তন হবে
+                // ব্যবহারকারী যখন ইনপুট বক্সে টাইপ করবে, তখন উপরের ডিসপ্লে এবং URL আপডেট হবে
                 const currentName = this.nameInput.value || 'Someone';
                 const currentMsg = this.messageInput.value || 'aapko Raksha Bandhan ki bahut bahut badhai';
 
@@ -111,6 +104,7 @@
             }
 
             updateUrl() {
+                // ইনপুট বক্সের বর্তমান লেখা দিয়ে URL তৈরি করা
                 const newUrl = new URL(window.location.pathname, window.location.origin);
                 if (this.nameInput.value) {
                     newUrl.searchParams.set('name', this.nameInput.value);
@@ -118,39 +112,39 @@
                 if (this.messageInput.value) {
                     newUrl.searchParams.set('msg', this.messageInput.value);
                 }
+                // replaceState ব্যবহার করে URL পরিবর্তন করা হচ্ছে, যাতে ব্রাউজার হিস্ট্রি পরিবর্তন না হয়
                 window.history.replaceState({}, '', newUrl);
             }
 
             shareOnWhatsApp() {
-                const urlToShare = window.location.href; // সবসময় বর্তমান URL শেয়ার করবে
-                const shareText = `*${this.nameDisplay.textContent}*\n\n_${this.messageDisplay.textContent}_\n\n👇 Check it out here 👇\n${urlToShare}`;
+                const urlToShare = window.location.href; 
+                // যদি ইনপুট বক্স খালি থাকে, তাহলে যেন একটি ডিফল্ট বার্তা শেয়ার হয়
+                const nameToShare = this.nameInput.value || 'Someone';
+                const msgToShare = this.messageInput.value || 'aapko Raksha Bandhan ki bahut bahut badhai';
+
+                const shareText = `*${nameToShare} ki taraf se:*\n\n_${msgToShare}_\n\n👇 Check it out here 👇\n${urlToShare}`;
                 const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                 window.open(whatsappUrl, '_blank');
             }
 
             initMusic() {
-                const playMusic = () => {
-                    this.bgMusic.volume = 0.7;
-                    this.bgMusic.play().catch(() => {});
-                };
+                const playMusic = () => { this.bgMusic.volume = 0.7; this.bgMusic.play().catch(() => {}); };
                 playMusic();
-                const enableMusic = () => {
-                    playMusic();
-                    document.removeEventListener('click', enableMusic);
-                    document.removeEventListener('touchstart', enableMusic);
-                };
+                const enableMusic = () => { playMusic(); document.removeEventListener('click', enableMusic); document.removeEventListener('touchstart', enableMusic); };
                 document.addEventListener('click', enableMusic);
                 document.addEventListener('touchstart', enableMusic);
             }
         }
 
-        function createFloatingElements() { for (let i = 0; i < 15; i++) { const b = document.createElement('div'); b.className = 'balloon'; b.style.left = `${Math.random()*100}vw`; b.style.top = `${Math.random()*100}vh`; b.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 70%)`; b.style.width = `${20+Math.random()*30}px`; b.style.height = `${30+Math.random()*50}px`; b.style.animationDuration = `${5+Math.random()*10}s`; document.body.appendChild(b); } const f = ['🌺','💐','🌸','🌼','🌻','🌈']; for (let i = 0; i < 20; i++) { const e = document.createElement('div'); e.className = 'flower'; e.textContent = f[Math.floor(Math.random()*f.length)]; e.style.left = `${Math.random()*100}vw`; e.style.top = `-50px`; e.style.animationDuration = `${5+Math.random()*10}s`; e.style.animationDelay = `${Math.random()*5}s`; document.body.appendChild(e); } }
-        function createConfetti() { for (let i = 0; i < 10; i++) { const c = document.createElement('div'); c.className = 'confetti'; c.style.left = `${Math.random()*100}vw`; c.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`; c.style.animationDuration = `${1+Math.random()*2}s`; document.body.appendChild(c); setTimeout(() => { c.remove() }, 3000); } }
-        function createSparkle() { const s = document.createElement('div'); s.className = 'sparkle'; s.style.left = `${Math.random()*100}vw`; s.style.top = `${Math.random()*100}vh`; document.body.appendChild(s); setTimeout(() => { s.remove() }, 2000); }
+        // অ্যানিমেশন ফাংশনগুলো অপরিবর্তিত
+        function createFloatingElements(){for(let i=0;i<15;i++){const b=document.createElement("div");b.className="balloon",b.style.left=`${100*Math.random()}vw`,b.style.top=`${100*Math.random()}vh`,b.style.backgroundColor=`hsl(${360*Math.random()}, 100%, 70%)`,b.style.width=`${20+30*Math.random()}px`,b.style.height=`${30+50*Math.random()}px`,b.style.animationDuration=`${5+10*Math.random()}s`,document.body.appendChild(b)}const f=["🌺","💐","🌸","🌼","🌻","🌈"];for(let i=0;i<20;i++){const e=document.createElement("div");e.className="flower",e.textContent=f[Math.floor(Math.random()*f.length)],e.style.left=`${100*Math.random()}vw`,e.style.top="-50px",e.style.animationDuration=`${5+10*Math.random()}s`,e.style.animationDelay=`${5*Math.random()}s`,document.body.appendChild(e)}}
+        function createConfetti(){for(let i=0;i<10;i++){const c=document.createElement("div");c.className="confetti",c.style.left=`${100*Math.random()}vw`,c.style.backgroundColor=`hsl(${360*Math.random()}, 100%, 50%)`,c.style.animationDuration=`${1+2*Math.random()}s`,document.body.appendChild(c),setTimeout(()=>{c.remove()},3e3)}}
+        function createSparkle(){const s=document.createElement("div");s.className="sparkle",s.style.left=`${100*Math.random()}vw`,s.style.top=`${100*Math.random()}vh`,document.body.appendChild(s),setTimeout(()=>{s.remove()},2e3)}
         
+        // অ্যাপ শুরু করার ফাংশন
         function initializeApp() { if (document.body && !window.appInitialized) { window.appInitialized = true; new GreetingSystem(); createFloatingElements(); setInterval(createConfetti, 3000); setInterval(createSparkle, 1000); } }
         document.addEventListener('DOMContentLoaded', initializeApp);
         window.addEventListener('load', initializeApp);
     </script>
 </body>
-</html>
+</html>```
