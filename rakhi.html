@@ -7,7 +7,44 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { min-height: 100vh; background: linear-gradient(135deg, #1a0033, #0a0033); color: white; overflow-x: hidden; position: relative; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        body { min-height: 100vh; background: linear-gradient(135deg, #1a0033, #0a0033); color: white; overflow-x: hidden; position: relative; }
+        
+        /* Entry Screen Styles */
+        #entry-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0033, #0a0033);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #enter-button {
+            background: linear-gradient(45deg, #ff00ff, #ff9900);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.7);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        /* Main Content Styles */
+        #main-content {
+            display: none; /* Initially hidden */
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            width: 100%;
+        }
+
         h1 { font-size: 2.5rem; margin: 20px 0; text-align: center; text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; animation: blink 2s infinite alternate; }
         .rakhi-img { width: 200px; height: 200px; object-fit: contain; margin: 20px 0; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7)); animation: pulse 2s infinite ease-in-out; }
         .sender-name { font-size: 2rem; margin: 10px 0; text-shadow: 0 0 5px cyan, 0 0 10px cyan; animation: glow 1.5s infinite alternate; }
@@ -28,32 +65,39 @@
     </style>
 </head>
 <body>
-    <h1>Happy Raksha Bandhan</h1>
-    <img src="https://i.postimg.cc/SsYg1Fsd/rakhi.gif" class="rakhi-img">
-    
-    <div class="sender-name" id="nameDisplay"></div>
-    <div class="message" id="messageDisplay"></div>
 
-    <div class="input-container" id="inputContainer">
-        <input type="text" id="nameInput" placeholder="Enter Your Name Here">
-        <textarea id="messageInput" rows="3" placeholder="Enter Your Message Here"></textarea>
+    <div id="entry-screen">
+        <button id="enter-button">✨ Enter ✨</button>
     </div>
 
-    <a href="https://fkrtt.in/en/BjDU6q" target="_blank" class="gift-button">🎁 Special Rakhi Gifts 🎁</a>
+    <div id="main-content">
+        <h1>Happy Raksha Bandhan</h1>
+        <img src="https://i.postimg.cc/SsYg1Fsd/rakhi.gif" class="rakhi-img">
+        
+        <div class="sender-name" id="nameDisplay"></div>
+        <div class="message" id="messageDisplay"></div>
 
-    <a href="#" class="whatsapp-button" id="whatsappButton">Share via WhatsApp</a>
+        <div class="input-container" id="inputContainer">
+            <input type="text" id="nameInput" placeholder="Enter Your Name Here">
+            <textarea id="messageInput" rows="3" placeholder="Enter Your Message Here"></textarea>
+        </div>
 
-    <audio id="bgMusic" loop autoplay>
+        <a href="https://fkrtt.in/en/BjDU6q" target="_blank" class="gift-button">🎁 Special Rakhi Gifts 🎁</a>
+
+        <a href="#" class="whatsapp-button" id="whatsappButton">Share via WhatsApp</a>
+    </div>
+
+    <audio id="bgMusic" loop>
         <source src="https://files.catbox.moe/mhny6w.mp3" type="audio/mpeg">
     </audio>
 
     <script>
+        // Main Application Logic
         class GreetingSystem {
             constructor() {
                 this.initElements();
                 this.initializePage();
                 this.setupEventListeners();
-                this.initMusic();
             }
 
             initElements() {
@@ -62,7 +106,6 @@
                 this.nameInput = document.getElementById('nameInput');
                 this.messageInput = document.getElementById('messageInput');
                 this.whatsappButton = document.getElementById('whatsappButton');
-                this.bgMusic = document.getElementById('bgMusic');
             }
 
             initializePage() {
@@ -98,12 +141,8 @@
 
             updateUrl() {
                 const newUrl = new URL(window.location.pathname, window.location.origin);
-                if (this.nameInput.value) {
-                    newUrl.searchParams.set('name', this.nameInput.value);
-                }
-                if (this.messageInput.value) {
-                    newUrl.searchParams.set('msg', this.messageInput.value);
-                }
+                if (this.nameInput.value) newUrl.searchParams.set('name', this.nameInput.value);
+                if (this.messageInput.value) newUrl.searchParams.set('msg', this.messageInput.value);
                 window.history.replaceState({}, '', newUrl);
             }
 
@@ -115,51 +154,39 @@
                 const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                 window.open(whatsappUrl, '_blank');
             }
-
-            initMusic() {
-                const audio = this.bgMusic;
-                audio.volume = 0.7;
-                let hasInteracted = false;
-
-                const attemptPlay = () => {
-                    if (audio.paused) {
-                        const playPromise = audio.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(error => {
-                                // এররটিকে উপেক্ষা করা হচ্ছে কারণ আমরা ইন্টারঅ্যাকশনের জন্য অপেক্ষা করব
-                            });
-                        }
-                    }
-                };
-
-                const onInteraction = () => {
-                    if (!hasInteracted) {
-                        hasInteracted = true;
-                        attemptPlay();
-                        // সফল ইন্টারঅ্যাকশনের পর আর লিসেনারের প্রয়োজন নেই
-                        document.body.removeEventListener('click', onInteraction);
-                        document.body.removeEventListener('touchstart', onInteraction);
-                        document.body.removeEventListener('keydown', onInteraction);
-                    }
-                };
-
-                // পেজ লোড হওয়ার সাথে সাথেই চেষ্টা করা
-                attemptPlay();
-                
-                // যদি ব্যর্থ হয়, তবে ইন্টারঅ্যাকশনের জন্য প্রস্তুত থাকা
-                document.body.addEventListener('click', onInteraction, true);
-                document.body.addEventListener('touchstart', onInteraction, true);
-                document.body.addEventListener('keydown', onInteraction, true);
-            }
         }
 
+        // Floating elements and other effects
         function createFloatingElements(){for(let i=0;i<15;i++){const b=document.createElement("div");b.className="balloon",b.style.left=`${100*Math.random()}vw`,b.style.top=`${100*Math.random()}vh`,b.style.backgroundColor=`hsl(${360*Math.random()}, 100%, 70%)`,b.style.width=`${20+30*Math.random()}px`,b.style.height=`${30+50*Math.random()}px`,b.style.animationDuration=`${5+10*Math.random()}s`,document.body.appendChild(b)}const f=["🌺","💐","🌸","🌼","🌻","🌈"];for(let i=0;i<20;i++){const e=document.createElement("div");e.className="flower",e.textContent=f[Math.floor(Math.random()*f.length)],e.style.left=`${100*Math.random()}vw`,e.style.top="-50px",e.style.animationDuration=`${5+10*Math.random()}s`,e.style.animationDelay=`${5*Math.random()}s`,document.body.appendChild(e)}}
         function createConfetti(){for(let i=0;i<10;i++){const c=document.createElement("div");c.className="confetti",c.style.left=`${100*Math.random()}vw`,c.style.backgroundColor=`hsl(${360*Math.random()}, 100%, 50%)`,c.style.animationDuration=`${1+2*Math.random()}s`,document.body.appendChild(c),setTimeout(()=>{c.remove()},3e3)}}
         function createSparkle(){const s=document.createElement("div");s.className="sparkle",s.style.left=`${100*Math.random()}vw`,s.style.top=`${100*Math.random()}vh`,document.body.appendChild(s),setTimeout(()=>{s.remove()},2e3)}
         
-        function initializeApp() { if (document.body && !window.appInitialized) { window.appInitialized = true; new GreetingSystem(); createFloatingElements(); setInterval(createConfetti, 3000); setInterval(createSparkle, 1000); } }
-        document.addEventListener('DOMContentLoaded', initializeApp);
-        window.addEventListener('load', initializeApp);
+        // App Initialization Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const entryScreen = document.getElementById('entry-screen');
+            const enterButton = document.getElementById('enter-button');
+            const mainContent = document.getElementById('main-content');
+            const audio = document.getElementById('bgMusic');
+            
+            enterButton.addEventListener('click', () => {
+                // Play audio on this guaranteed user gesture
+                audio.volume = 0.7;
+                audio.play().catch(e => console.error("Audio play failed even on dedicated click:", e));
+                
+                // Hide entry screen and show main content
+                entryScreen.style.display = 'none';
+                mainContent.style.display = 'flex';
+
+                // Initialize the rest of the app
+                if (!window.appInitialized) {
+                    window.appInitialized = true;
+                    new GreetingSystem();
+                    createFloatingElements();
+                    setInterval(createConfetti, 3000);
+                    setInterval(createSparkle, 1000);
+                }
+            }, { once: true });
+        });
     </script>
 </body>
 <!-- আপনার বিজ্ঞাপনের কোডগুলো অপরিবর্তিত রাখা হয়েছে -->
