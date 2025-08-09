@@ -6,14 +6,12 @@
     <title>Happy Raksha Bandhan</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
-        
         body {
             min-height: 100vh;
             background: linear-gradient(135deg, #1a0033, #0a0033);
@@ -25,7 +23,6 @@
             align-items: center;
             padding: 20px;
         }
-        
         h1 {
             font-size: 2.5rem;
             margin: 20px 0;
@@ -33,7 +30,6 @@
             text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
             animation: blink 2s infinite alternate;
         }
-        
         .rakhi-img {
             width: 200px;
             height: 200px;
@@ -42,14 +38,12 @@
             filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
             animation: pulse 2s infinite ease-in-out;
         }
-        
         .sender-name {
             font-size: 2rem;
             margin: 10px 0;
             text-shadow: 0 0 5px cyan, 0 0 10px cyan;
             animation: glow 1.5s infinite alternate;
         }
-        
         .message {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
@@ -63,7 +57,6 @@
             font-size: 1.2rem;
             line-height: 1.6;
         }
-        
         .input-container {
             display: flex;
             flex-direction: column;
@@ -71,7 +64,6 @@
             max-width: 500px;
             margin: 20px 0;
         }
-        
         input, textarea {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid #ff00ff;
@@ -83,12 +75,10 @@
             outline: none;
             transition: all 0.3s;
         }
-        
         input:focus, textarea:focus {
             border-color: cyan;
             box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
-        
         .gift-button {
             display: inline-block;
             background: linear-gradient(45deg, #ff00ff, #ff9900);
@@ -107,19 +97,16 @@
             transition: all 0.3s;
             text-align: center;
         }
-        
         .gift-button:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
         }
-        
         .gift-button::after {
             content: "👇";
             position: absolute;
             right: 10px;
             animation: bounce 1s infinite;
         }
-        
         .whatsapp-button {
             display: flex;
             align-items: center;
@@ -134,12 +121,10 @@
             font-size: 1.1rem;
             transition: all 0.3s;
         }
-        
         .whatsapp-button:hover {
             background: #128C7E;
             transform: scale(1.05);
         }
-        
         .whatsapp-button::before {
             content: "";
             display: inline-block;
@@ -149,111 +134,22 @@
             background-size: contain;
             margin-right: 10px;
         }
-        
         /* Animations */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-        
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px cyan, 0 0 10px cyan; }
-            100% { text-shadow: 0 0 10px gold, 0 0 20px gold; }
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        @keyframes glow { 0% { text-shadow: 0 0 5px cyan, 0 0 10px cyan; } 100% { text-shadow: 0 0 10px gold, 0 0 20px gold; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         /* Floating elements */
-        .balloon {
-            position: absolute;
-            width: 40px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
-            filter: blur(1px);
-            animation: float 8s infinite ease-in-out;
-            z-index: -1;
-        }
-        
-        .flower {
-            position: absolute;
-            font-size: 1.5rem;
-            animation: fall linear infinite;
-            z-index: -1;
-        }
-        
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #f00;
-            opacity: 0;
-            animation: confetti-fall 3s linear infinite;
-            z-index: -1;
-        }
-        
-        .sparkle {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background-color: #fff;
-            border-radius: 50%;
-            filter: blur(1px);
-            opacity: 0;
-            animation: sparkle 2s infinite;
-            z-index: -1;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-100px) rotate(180deg); }
-            100% { transform: translateY(0) rotate(360deg); }
-        }
-        
-        @keyframes fall {
-            to { transform: translateY(100vh); }
-        }
-        
-        @keyframes confetti-fall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-        
-        @keyframes sparkle {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0); opacity: 0; }
-        }
-        
+        .balloon { position: absolute; width: 40px; height: 60px; background: rgba(255, 255, 255, 0.7); border-radius: 50%; filter: blur(1px); animation: float 8s infinite ease-in-out; z-index: -1; }
+        .flower { position: absolute; font-size: 1.5rem; animation: fall linear infinite; z-index: -1; }
+        .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; animation: confetti-fall 3s linear infinite; z-index: -1; }
+        .sparkle { position: absolute; width: 5px; height: 5px; background-color: #fff; border-radius: 50%; filter: blur(1px); opacity: 0; animation: sparkle 2s infinite; z-index: -1; }
+        @keyframes float { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-100px) rotate(180deg); } 100% { transform: translateY(0) rotate(360deg); } }
+        @keyframes fall { to { transform: translateY(100vh); } }
+        @keyframes confetti-fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+        @keyframes sparkle { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
         /* Responsive */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .rakhi-img {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .sender-name {
-                font-size: 1.5rem;
-            }
-            
-            .message {
-                font-size: 1rem;
-            }
-        }
+        @media (max-width: 768px) { h1 { font-size: 1.8rem; } .rakhi-img { width: 150px; height: 150px; } .sender-name { font-size: 1.5rem; } .message { font-size: 1rem; } }
     </style>
 </head>
 <body>
@@ -262,33 +158,30 @@
     
     <div class="sender-name" id="nameDisplay">Someone</div>
     <div class="message" id="messageDisplay">aapko Raksha Bandhan ki bahut bahut badhai</div>
-    
+
     <div class="input-container" id="inputContainer">
-        <input type="text" id="nameInput" placeholder="Your name">
-        <textarea id="messageInput" rows="3" placeholder="Your message"></textarea>
+        <input type="text" id="nameInput" placeholder="Enter Your Name Here">
+        <textarea id="messageInput" rows="3" placeholder="Enter Your Message Here"></textarea>
     </div>
-    
+
     <a href="https://fkrtt.in/en/BjDU6q" target="_blank" class="gift-button">🎁 Special Rakhi Gifts 🎁</a>
-    
+
     <a href="#" class="whatsapp-button" id="whatsappButton">Share via WhatsApp</a>
-    
+
     <audio id="bgMusic" loop autoplay>
         <source src="https://files.catbox.moe/mhny6w.mp3" type="audio/mpeg">
     </audio>
-    
+
     <script>
-        // Real-time message update system
         class GreetingSystem {
             constructor() {
-                this.name = 'Someone';
-                this.message = 'aapko Raksha Bandhan ki bahut bahut badhai';
                 this.initElements();
+                this.checkUrlParams(); // প্রথমে URL চেক করবে
                 this.setupEventListeners();
-                this.checkUrlParams();
-                this.updateDisplay();
+                this.updateDisplay(); // এরপর ডিসপ্লে আপডেট করবে
                 this.initMusic();
             }
-            
+
             initElements() {
                 this.nameDisplay = document.getElementById('nameDisplay');
                 this.messageDisplay = document.getElementById('messageDisplay');
@@ -298,177 +191,92 @@
                 this.whatsappButton = document.getElementById('whatsappButton');
                 this.bgMusic = document.getElementById('bgMusic');
             }
-            
+
             initMusic() {
-                // Multiple attempts to play music
                 const playMusic = () => {
                     this.bgMusic.volume = 0.7;
-                    this.bgMusic.play().catch(() => {
-                        // Silent fail, no user notification
-                    });
+                    this.bgMusic.play().catch(() => {});
                 };
-                
-                // Try immediately
                 playMusic();
-                
-                // Try on any user interaction
                 const enableMusic = () => {
                     playMusic();
                     document.removeEventListener('click', enableMusic);
                     document.removeEventListener('touchstart', enableMusic);
-                    document.removeEventListener('keydown', enableMusic);
-                    document.removeEventListener('scroll', enableMusic);
                 };
-                
                 document.addEventListener('click', enableMusic);
                 document.addEventListener('touchstart', enableMusic);
-                document.addEventListener('keydown', enableMusic);
-                document.addEventListener('scroll', enableMusic);
-                
-                // Try after a short delay
-                setTimeout(playMusic, 100);
-                setTimeout(playMusic, 500);
-                setTimeout(playMusic, 1000);
             }
-            
+
             setupEventListeners() {
-                // Real-time updates when typing
                 this.nameInput.addEventListener('input', () => this.handleInputChange());
                 this.messageInput.addEventListener('input', () => this.handleInputChange());
-                
-                // WhatsApp share
                 this.whatsappButton.addEventListener('click', (e) => {
                     e.preventDefault();
                     this.shareOnWhatsApp();
                 });
             }
-            
+
             checkUrlParams() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const urlName = urlParams.get('name');
                 const urlMsg = urlParams.get('msg');
                 
-                if (urlName || urlMsg) {
-                    this.inputContainer.style.display = 'none';
-                    if (urlName) this.name = urlName;
-                    if (urlMsg) this.message = urlMsg;
-                } else {
-                    this.inputContainer.style.display = 'flex';
-                }
+                // যদি URL-এ নাম বা বার্তা থাকে, তাহলে সেটাকে প্রদর্শনের জন্য সেট করা হবে
+                // আর যদি না থাকে, তাহলে ডিফল্ট বার্তা ব্যবহার করা হবে
+                this.name = urlName || 'Someone';
+                this.message = urlMsg || 'aapko Raksha Bandhan ki bahut bahut badhai';
+
+                // ইনপুট বক্স সবসময়ই দৃশ্যমান থাকবে, তাই এখানে কোনো display property পরিবর্তন করার প্রয়োজন নেই
             }
-            
+
             handleInputChange() {
+                // যখন ব্যবহারকারী নতুন করে কিছু লিখবে, তখন প্রদর্শনের বার্তা পরিবর্তন হবে
                 this.name = this.nameInput.value || 'Someone';
                 this.message = this.messageInput.value || 'aapko Raksha Bandhan ki bahut bahut badhai';
                 this.updateDisplay();
                 this.updateUrl();
             }
-            
+
             updateDisplay() {
                 this.nameDisplay.textContent = this.name + ' ki taraf se:';
                 this.messageDisplay.textContent = this.message;
             }
-            
+
             updateUrl() {
-                const newUrl = new URL(window.location.href);
-                newUrl.searchParams.set('name', this.name);
-                newUrl.searchParams.set('msg', this.message);
-                window.history.pushState({}, '', newUrl);
+                // যখনই ইনপুট পরিবর্তন হবে, তখনই URL আপডেট হবে
+                const currentName = this.nameInput.value || 'Someone';
+                const currentMessage = this.messageInput.value || 'aapko Raksha Bandhan ki bahut bahut badhai';
+
+                const newUrl = new URL(window.location.pathname, window.location.origin);
+                newUrl.searchParams.set('name', currentName);
+                newUrl.searchParams.set('msg', currentMessage);
+                window.history.replaceState({}, '', newUrl);
             }
-            
+
             shareOnWhatsApp() {
-                const shareText = `${this.nameDisplay.textContent} ${this.messageDisplay.textContent}\n\n${window.location.href}`;
+                // শেয়ার করার সময় বর্তমান URL ব্যবহার করা হবে
+                const shareText = `*${this.nameDisplay.textContent}*\n\n_${this.messageDisplay.textContent}_\n\n👇 Check it out here 👇\n${window.location.href}`;
                 const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                 window.open(whatsappUrl, '_blank');
             }
         }
+
+        function createFloatingElements() { for (let i = 0; i < 15; i++) { const balloon = document.createElement('div'); balloon.className = 'balloon'; balloon.style.left = `${Math.random() * 100}vw`; balloon.style.top = `${Math.random() * 100}vh`; balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`; balloon.style.width = `${20 + Math.random() * 30}px`; balloon.style.height = `${30 + Math.random() * 50}px`; balloon.style.animationDuration = `${5 + Math.random() * 10}s`; document.body.appendChild(balloon); } const flowers = ['🌺', '💐', '🌸', '🌼', '🌻', '🌈']; for (let i = 0; i < 20; i++) { const flower = document.createElement('div'); flower.className = 'flower'; flower.textContent = flowers[Math.floor(Math.random() * flowers.length)]; flower.style.left = `${Math.random() * 100}vw`; flower.style.top = `-50px`; flower.style.animationDuration = `${5 + Math.random() * 10}s`; flower.style.animationDelay = `${Math.random() * 5}s`; document.body.appendChild(flower); } }
+        function createConfetti() { for (let i = 0; i < 10; i++) { const confetti = document.createElement('div'); confetti.className = 'confetti'; confetti.style.left = `${Math.random() * 100}vw`; confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; confetti.style.animationDuration = `${1 + Math.random() * 2}s`; document.body.appendChild(confetti); setTimeout(() => { confetti.remove(); }, 3000); } }
+        function createSparkle() { const sparkle = document.createElement('div'); sparkle.className = 'sparkle'; sparkle.style.left = `${Math.random() * 100}vw`; sparkle.style.top = `${Math.random() * 100}vh`; document.body.appendChild(sparkle); setTimeout(() => { sparkle.remove(); }, 2000); }
         
-        // Create floating elements
-        function createFloatingElements() {
-            // Balloons
-            for (let i = 0; i < 15; i++) {
-                const balloon = document.createElement('div');
-                balloon.className = 'balloon';
-                balloon.style.left = `${Math.random() * 100}vw`;
-                balloon.style.top = `${Math.random() * 100}vh`;
-                balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
-                balloon.style.width = `${20 + Math.random() * 30}px`;
-                balloon.style.height = `${30 + Math.random() * 50}px`;
-                balloon.style.animationDuration = `${5 + Math.random() * 10}s`;
-                document.body.appendChild(balloon);
-            }
-            
-            // Flowers
-            const flowers = ['🌺', '💐', '🌸', '🌼', '🌻', '🌈'];
-            for (let i = 0; i < 20; i++) {
-                const flower = document.createElement('div');
-                flower.className = 'flower';
-                flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-                flower.style.left = `${Math.random() * 100}vw`;
-                flower.style.top = `-50px`;
-                flower.style.animationDuration = `${5 + Math.random() * 10}s`;
-                flower.style.animationDelay = `${Math.random() * 5}s`;
-                document.body.appendChild(flower);
+        function initializeApp() {
+            if (document.body && !window.appInitialized) {
+                window.appInitialized = true;
+                new GreetingSystem();
+                createFloatingElements();
+                setInterval(createConfetti, 3000);
+                setInterval(createSparkle, 1000);
             }
         }
         
-        function createConfetti() {
-            for (let i = 0; i < 10; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = `${Math.random() * 100}vw`;
-                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                confetti.style.animationDuration = `${1 + Math.random() * 2}s`;
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => {
-                    confetti.remove();
-                }, 3000);
-            }
-        }
-        
-        function createSparkle() {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            sparkle.style.left = `${Math.random() * 100}vw`;
-            sparkle.style.top = `${Math.random() * 100}vh`;
-            document.body.appendChild(sparkle);
-            
-            setTimeout(() => {
-                sparkle.remove();
-            }, 2000);
-        }
-        
-        // Initialize everything when the page loads
-        window.addEventListener('load', function() {
-            // Initialize the greeting system
-            const greetingSystem = new GreetingSystem();
-            
-            // Create visual effects
-            createFloatingElements();
-            
-            // Create periodic effects
-            setInterval(createConfetti, 3000);
-            setInterval(createSparkle, 1000);
-        });
-        
-        // Also try to start on DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', function() {
-            const greetingSystem = new GreetingSystem();
-            createFloatingElements();
-        });
+        document.addEventListener('DOMContentLoaded', initializeApp);
+        window.addEventListener('load', initializeApp);
     </script>
 </body>
-<script async="async" data-cfasync="false" src="//breakdowninsinuateeliza.com/16e760128b8a492881b23188e0e0a0c2/invoke.js"></script>
-<div id="container-16e760128b8a492881b23188e0e0a0c2"></div>
 </html>
-<script type="text/javascript">
-	atOptions = {
-		'key' : 'a07a39e10a3bd9f27ae52751e4f94e88',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//breakdowninsinuateeliza.com/a07a39e10a3bd9f27ae52751e4f94e88/invoke.js"></script>
