@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Diwali</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            position: relative;
+            color: white;
+        }
+        
+        /* Landing Screen Styles */
+        .landing-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            z-index: 100;
+            transition: opacity 1s ease-out;
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .landing-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: zoomInOut 3s ease-in-out infinite;
+        }
+        
+        @keyframes zoomInOut {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        
+        .start-button {
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        .start-button:hover {
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+            transform: translateY(-3px);
+        }
+        
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 55%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+        
+        /* Main Celebration Page Styles */
+        .celebration-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(to bottom, #4b0082, #8b0000);
+            z-index: 10;
+        }
+        
+        .diwali-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-top: 20px;
+            text-shadow: 0 0 10px gold;
+            animation: flicker 2s infinite alternate;
+            background: linear-gradient(90deg, #ff8a00, #ff0058);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow: 0 0 10px gold, 0 0 20px orange;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+        
+        .diya-container {
+            margin: 20px 0;
+            width: 80%;
+            max-width: 400px;
+            position: relative;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .diya-img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 165, 0, 0.5);
+            transition: box-shadow 0.5s;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .greeting {
+            font-size: 1.5rem;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .greeting::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400%;
+            border-radius: 10px;
+            opacity: 0;
+            transition: 0.5s;
+            animation: animate 20s linear infinite;
+        }
+        
+        .greeting:hover::before {
+            opacity: 1;
+            filter: blur(5px);
+        }
+        
+        @keyframes animate {
+            0% {
+                background-position: 0 0;
+            }
+            50% {
+                background-position: 300% 0;
+            }
+            100% {
+                background-position: 0 0;
+            }
+        }
+        
+        .name {
+            font-weight: bold;
+            color: gold;
+            animation: nameGlow 3s infinite alternate;
+        }
+        
+        @keyframes nameGlow {
+            0% {
+                text-shadow: 0 0 5px gold;
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 20px orange, 0 0 30px gold;
+                transform: scale(1.05);
+            }
+        }
+        
+        .input-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 10px 0;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: gold;
+            box-shadow: 0 0 10px gold;
+        }
+        
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .action-button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .gift-button {
+            background: linear-gradient(to right, #ff8a00, #ff0058);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(255, 0, 88, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .gift-button::before {
+            content: '👇';
+            position: absolute;
+            top: -20px;
+            animation: pointDown 2s infinite;
+        }
+        
+        @keyframes pointDown {
+            0%, 100% {
+                top: -20px;
+            }
+            50% {
+                top: -15px;
+            }
+        }
+        
+        .share-button {
+            background: #25D366;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.5);
+        }
+        
+        .share-button:hover {
+            background: #128C7E;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.8);
+        }
+        
+        /* Celebration Effects */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0.7;
+            animation: confettiFall 5s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .emoji {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: emojiFall linear infinite;
+            z-index: 2;
+            opacity: 0.8;
+        }
+        
+        @keyframes emojiFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg) translateX(0);
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg) translateX(50px);
+            }
+        }
+        
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            border-radius: 50%;
+            animation: balloonFloat 10s linear infinite;
+            z-index: 1;
+            opacity: 0.7;
+            filter: drop-shadow(0 0 5px currentColor);
+        }
+        
+        @keyframes balloonFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(50px) scale(1.2);
+                opacity: 0;
+            }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .landing-title {
+                font-size: 2rem;
+            }
+            
+            .start-button {
+                font-size: 1.2rem;
+                padding: 12px 24px;
+            }
+            
+            .diwali-title {
+                font-size: 2rem;
+            }
+            
+            .greeting {
+                font-size: 1.2rem;
+            }
+            
+            .action-button {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            .diya-container {
+                width: 60%;
+            }
+            
+            .greeting {
+                margin: 10px 0;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Screen -->
+    <div class="landing-screen" id="landingScreen">
+        <h1 class="landing-title">Welcome to Diwali Celebrations!</h1>
+        <button class="start-button" id="startButton">Light the Diya</button>
+    </div>
+    
+    <!-- Celebration Screen -->
+    <div class="celebration-screen" id="celebrationScreen">
+        <h1 class="diwali-title">Happy Diwali!</h1>
+        
+        <div class="diya-container">
+            <img src="diwali-diya.gif" alt="Diwali Diya" class="diya-img" id="diyaImg">
+        </div>
+        
+        <div class="greeting" id="greeting">
+            <span class="name" id="nameDisplay">Someone</span> ki taraf se: 
+            <span id="messageDisplay">aapko Diwali ki hardik shubhkamnayein</span>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" class="input-field" id="nameInput" placeholder="Enter your name">
+            <textarea class="input-field" id="messageInput" rows="3" placeholder="Type your Diwali message"></textarea>
+        </div>
+        
+        <div class="button-container">
+            <!-- 🔥🔥 PASTE YOUR AMAZON AFFILIATE LINK BELOW 🔥🔥 -->
+            <a href="YOUR_AFFILIATE_LINK" target="_blank" class="action-button gift-button">🎁 Special Diwali Gifts 🎁</a>
+            <button class="action-button share-button" id="shareButton">
+                <span>Share via WhatsApp</span>
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const landingScreen = document.getElementById('landingScreen');
+        const celebrationScreen = document.getElementById('celebrationScreen');
+        const startButton = document.getElementById('startButton');
+        const nameInput = document.getElementById('nameInput');
+        const messageInput = document.getElementById('messageInput');
+        const nameDisplay = document.getElementById('nameDisplay');
+        const messageDisplay = document.getElementById('messageDisplay');
+        const shareButton = document.getElementById('shareButton');
+        const diyaImg = document.getElementById('diyaImg');
+        
+        // Audio element
+        const audio = new Audio('diwali-music.mp3');
+        audio.loop = true;
+        
+        // Check URL parameters for name and message
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlName = urlParams.get('name');
+        const urlMessage = urlParams.get('msg');
+        
+        // Initialize with URL parameters or defaults
+        if (urlName) {
+            nameInput.value = urlName;
+            nameDisplay.textContent = urlName;
+        }
+        
+        if (urlMessage) {
+            messageInput.value = decodeURIComponent(urlMessage);
+            messageDisplay.textContent = decodeURIComponent(urlMessage);
+        }
+        
+        // Event Listeners
+        startButton.addEventListener('click', startCelebration);
+        nameInput.addEventListener('input', updateName);
+        messageInput.addEventListener('input', updateMessage);
+        shareButton.addEventListener('click', shareViaWhatsApp);
+        
+        // Functions
+        function startCelebration() {
+            // Fade out landing screen
+            landingScreen.style.opacity = '0';
+            
+            // Play music
+            audio.play().catch(e => console.log('Auto-play prevented:', e));
+            
+            // Show celebration screen after fade out
+            setTimeout(() => {
+                landingScreen.style.display = 'none';
+                celebrationScreen.style.display = 'flex';
+                
+                // Start celebration effects
+                createConfetti();
+                createEmojis();
+                createBalloons();
+                
+                // Music reactive effects
+                setupAudioAnalyser();
+            }, 1000);
+        }
+        
+        function updateName() {
+            nameDisplay.textContent = nameInput.value || 'Someone';
+        }
+        
+        function updateMessage() {
+            messageDisplay.textContent = messageInput.value || 'aapko Diwali ki hardik shubhkamnayein';
+        }
+        
+        function shareViaWhatsApp() {
+            const name = nameInput.value || 'Someone';
+            const message = messageInput.value || 'aapko Diwali ki hardik shubhkamnayein';
+            const encodedMessage = encodeURIComponent(`${name} ki taraf se: ${message}`);
+            const shareUrl = `${window.location.href.split('?')[0]}?name=${encodeURIComponent(name)}&msg=${encodeURIComponent(message)}`;
+            const whatsappUrl = `https://wa.me/?text=${encodedMessage}%0A%0ACelebrate%20Diwali%20with%20me:%20${encodeURIComponent(shareUrl)}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+        
+        // Celebration Effects
+        function createConfetti() {
+            const colors = ['#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#9900ff', '#ff00ff'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = `${5 + Math.random() * 10}s`;
+                    confetti.style.width = `${5 + Math.random() * 10}px`;
+                    confetti.style.height = `${5 + Math.random() * 10}px`;
+                    celebrationScreen.appendChild(confetti);
+                    
+                    // Remove confetti after animation completes
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 15000);
+                }, i * 100);
+            }
+        }
+        
+        function createEmojis() {
+            const emojis = ['🪔', '🎆', '🎉', '✨', '🎇', '🌟', '🎊', '🔥'];
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = `${10 + Math.random() * 80}%`;
+                    emoji.style.animationDuration = `${10 + Math.random() * 20}s`;
+                    emoji.style.fontSize = `${1 + Math.random() * 2}rem`;
+                    celebrationScreen.appendChild(emoji);
+                    
+                    // Remove emoji after animation completes
+                    setTimeout(() => {
+                        emoji.remove();
+                    }, 30000);
+                }, i * 500);
+            }
+        }
+        
+        function createBalloons() {
+            const colors = ['gold', 'orange', 'hotpink', 'cyan', 'lime'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'balloon';
+                    balloon.style.left = `${Math.random() * 100}%`;
+                    balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    balloon.style.animationDuration = `${15 + Math.random() * 15}s`;
+                    balloon.style.width = `${30 + Math.random() * 40}px`;
+                    balloon.style.height = `${40 + Math.random() * 50}px`;
+                    
+                    // Create balloon tail
+                    const tail = document.createElement('div');
+                    tail.style.position = 'absolute';
+                    tail.style.bottom = '-15px';
+                    tail.style.left = '50%';
+                    tail.style.width = '2px';
+                    tail.style.height = '15px';
+                    tail.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+                    tail.style.transform = 'translateX(-50%)';
+                    
+                    balloon.appendChild(tail);
+                    celebrationScreen.appendChild(balloon);
+                    
+                    // Remove balloon after animation completes
+                    setTimeout(() => {
+                        balloon.remove();
+                    }, 30000);
+                }, i * 1000);
+            }
+        }
+        
+        // Music Reactive Effects
+        function setupAudioAnalyser() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const analyser = audioContext.createAnalyser();
+            const source = audioContext.createMediaElementSource(audio);
+            
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            analyser.fftSize = 64;
+            
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            
+            function updateVisuals() {
+                requestAnimationFrame(updateVisuals);
+                analyser.getByteFrequencyData(dataArray);
+                
+                // Calculate average volume
+                let sum = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    sum += dataArray[i];
+                }
+                const average = sum / bufferLength;
+                
+                // Scale diya based on volume
+                const scale = 1 + (average / 255) * 0.2;
+                diyaImg.style.transform = `scale(${scale})`;
+                
+                // Adjust shadow glow based on volume
+                const glowIntensity = 10 + (average / 255) * 30;
+                diyaImg.style.boxShadow = `0 0 ${glowIntensity}px rgba(255, 165, 0, 0.7)`;
+                
+                // Occasionally create more effects on peaks
+                if (average > 150 && Math.random() > 0.7) {
+                    createConfettiBurst();
+                }
+            }
+            
+            updateVisuals();
+        }
+        
+        function createConfettiBurst() {
+            const colors = ['#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#9900ff', '#ff00ff'];
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${40 + Math.random() * 20}%`;
+                confetti.style.top = '50%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animation = `confettiFall ${2 + Math.random() * 3}s linear forwards`;
+                confetti.style.width = `${5 + Math.random() * 10}px`;
+                confetti.style.height = `${5 + Math.random() * 10}px`;
+                celebrationScreen.appendChild(confetti);
+                
+                // Remove confetti after animation completes
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+<script async="async" data-cfasync="false" src="//breakdowninsinuateeliza.com/16e760128b8a492881b23188e0e0a0c2/invoke.js"></script>
+<div id="container-16e760128b8a492881b23188e0e0a0c2"></div>
+</html>
+<script type="text/javascript">
+	atOptions = {
+		'key' : 'a07a39e10a3bd9f27ae52751e4f94e88',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//breakdowninsinuateeliza.com/a07a39e10a3bd9f27ae52751e4f94e88/invoke.js"></script>

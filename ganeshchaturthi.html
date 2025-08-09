@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Ganesh Chaturthi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff8c00, #e63900);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            animation: blink 2s infinite, glow 1.5s ease-in-out infinite alternate;
+            background: linear-gradient(to right, #ffcc00, #ff6600);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 5px rgba(255, 215, 0, 0.8); }
+            to { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 165, 0, 0.6); }
+        }
+        
+        .ganesha-img {
+            width: 300px;
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        
+        .greeting {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            animation: glow 2s infinite alternate;
+        }
+        
+        .sender-name {
+            font-weight: 700;
+            color: #ffcc00;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+        
+        .form-group {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        input, textarea {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            transition: all 0.3s;
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #ffcc00;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            border: none;
+        }
+        
+        .btn-gift {
+            background: linear-gradient(to right, #ff8c00, #ffcc00);
+            color: #333;
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.4);
+        }
+        
+        .btn-gift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.6);
+        }
+        
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        
+        .btn-whatsapp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.6);
+        }
+        
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        /* Floating elements */
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 8s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100px) translateX(20px); opacity: 0; }
+        }
+        
+        .modak {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23FFD700" d="M50 10C30 10 20 30 20 50c0 20 10 30 30 30s30-10 30-30c0-20-10-40-30-40z"/><path fill="%23FFA500" d="M50 15C32 15 25 32 25 50c0 18 7 25 25 25s25-7 25-25c0-18-7-35-25-35z"/></svg>') no-repeat;
+            background-size: contain;
+            animation: fall 10s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes fall {
+            0% { transform: translateY(-100px) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(100vh) translateX(50px) rotate(360deg); opacity: 0; }
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+            z-index: 1;
+        }
+        
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffcc00;
+            opacity: 0;
+            animation: confetti-fall 10s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .greeting {
+                font-size: 1.2rem;
+            }
+            
+            .ganesha-img {
+                width: 250px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .greeting {
+                font-size: 1rem;
+            }
+            
+            .ganesha-img {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Happy Ganesh Chaturthi</h1>
+        
+        <img src="https://i.postimg.cc/TwTKvbC3/Create-Ganesh-Chaturthi-2023-Animated-Wishes-Link-with-Name.gif" alt="Lord Ganesha" class="ganesha-img">
+        
+        <div class="greeting">
+            <span class="sender-name" id="display-name">Someone</span> ki taraf se: 
+            <span id="display-msg">Wishing you a blessed and joyful Ganesh Chaturthi!</span>
+        </div>
+        
+        <div class="form-group" id="input-fields">
+            <input type="text" id="name-input" placeholder="Your name" value="Someone">
+            <textarea id="msg-input" rows="3" placeholder="Your message">Wishing you a blessed and joyful Ganesh Chaturthi!</textarea>
+        </div>
+        
+        <div class="buttons">
+            <a href="https://fkrtt.in/en/lBcBq3" target="_blank" class="btn btn-gift">
+                Special Ganesh Gifts <span class="bounce">👇</span>
+            </a>
+            <button class="btn btn-whatsapp" id="whatsapp-share">
+                <i class="fab fa-whatsapp"></i> Share on WhatsApp
+            </button>
+        </div>
+    </div>
+    
+    <audio id="bg-music" loop>
+        <source src="https://files.catbox.moe/hh86sd.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        // Create floating elements
+        function createFloatingElements() {
+            const colors = ['#FFD700', '#FFA500', '#FF6347', '#FF8C00', '#FFD700'];
+            
+            // Balloons
+            for (let i = 0; i < 15; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.left = Math.random() * 100 + 'vw';
+                balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.animationDuration = (8 + Math.random() * 7) + 's';
+                balloon.style.animationDelay = Math.random() * 5 + 's';
+                balloon.style.width = (30 + Math.random() * 20) + 'px';
+                balloon.style.height = (40 + Math.random() * 30) + 'px';
+                document.body.appendChild(balloon);
+            }
+            
+            // Modaks
+            for (let i = 0; i < 20; i++) {
+                const modak = document.createElement('div');
+                modak.className = 'modak';
+                modak.style.left = Math.random() * 100 + 'vw';
+                modak.style.animationDuration = (10 + Math.random() * 10) + 's';
+                modak.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(modak);
+            }
+            
+            // Sparkles
+            for (let i = 0; i < 30; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + 'vw';
+                sparkle.style.top = Math.random() * 100 + 'vh';
+                sparkle.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(sparkle);
+            }
+            
+            // Confetti
+            for (let i = 0; i < 25; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (10 + Math.random() * 10) + 's';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confetti.style.width = (5 + Math.random() * 10) + 'px';
+                confetti.style.height = (5 + Math.random() * 10) + 'px';
+                document.body.appendChild(confetti);
+            }
+        }
+        
+        // Check URL parameters
+        function checkParams() {
+            const params = new URLSearchParams(window.location.search);
+            const name = params.get('name');
+            const msg = params.get('msg');
+            
+            if (name || msg) {
+                document.getElementById('input-fields').classList.add('hidden');
+                
+                if (name) {
+                    document.getElementById('display-name').textContent = name;
+                }
+                
+                if (msg) {
+                    document.getElementById('display-msg').textContent = msg;
+                }
+            }
+        }
+        
+        // Update URL and greeting
+        function updateGreeting() {
+            const name = document.getElementById('name-input').value || 'Someone';
+            const msg = document.getElementById('msg-input').value || 'Wishing you a blessed and joyful Ganesh Chaturthi!';
+            
+            document.getElementById('display-name').textContent = name;
+            document.getElementById('display-msg').textContent = msg;
+            
+            // Update URL without reload
+            const newUrl = window.location.pathname + `?name=${encodeURIComponent(name)}&msg=${encodeURIComponent(msg)}`;
+            history.pushState(null, '', newUrl);
+        }
+        
+        // Share on WhatsApp
+        function shareOnWhatsApp() {
+            const name = document.getElementById('display-name').textContent;
+            const msg = document.getElementById('display-msg').textContent;
+            const url = window.location.href;
+            
+            const whatsappMsg = `${name} ki taraf se: ${msg}\n${url}`;
+            const encodedMsg = encodeURIComponent(whatsappMsg);
+            window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
+        }
+        
+        // Initialize background music with user interaction
+        function initMusic() {
+            const music = document.getElementById('bg-music');
+            let played = false;
+            
+            function playMusic() {
+                if (!played) {
+                    music.volume = 0.3;
+                    music.play().catch(e => console.log('Auto-play prevented:', e));
+                    played = true;
+                    window.removeEventListener('click', playMusic);
+                    window.removeEventListener('scroll', playMusic);
+                }
+            }
+            
+            window.addEventListener('click', playMusic);
+            window.addEventListener('scroll', playMusic);
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            createFloatingElements();
+            checkParams();
+            initMusic();
+            
+            document.getElementById('name-input').addEventListener('input', updateGreeting);
+            document.getElementById('msg-input').addEventListener('input', updateGreeting);
+            document.getElementById('whatsapp-share').addEventListener('click', shareOnWhatsApp);
+        });
+    </script>
+</body>
+<script async="async" data-cfasync="false" src="//breakdowninsinuateeliza.com/16e760128b8a492881b23188e0e0a0c2/invoke.js"></script>
+<div id="container-16e760128b8a492881b23188e0e0a0c2"></div>
+</html>
+<script type="text/javascript">
+	atOptions = {
+		'key' : 'a07a39e10a3bd9f27ae52751e4f94e88',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//breakdowninsinuateeliza.com/a07a39e10a3bd9f27ae52751e4f94e88/invoke.js"></script>
