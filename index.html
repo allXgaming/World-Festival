@@ -178,13 +178,30 @@ const firebaseConfig = {
     const festivalViewer = document.getElementById('festivalViewer');
     const searchInput = document.getElementById('searchInput');
 
+    // MODIFIED: This function now injects URL parameters into the iframe content.
     const showFestival = (itemId) => {
         currentItemId = itemId;
         const itemData = allItems.find(item => item.id === itemId);
         if (itemData && itemData.htmlContent) {
+            let finalHtml = itemData.htmlContent;
+            const params = new URLSearchParams(window.location.search);
+            const name = params.get('name');
+            const msg = params.get('msg');
+            
+            // Inject a script into the iframe's head to pass the data
+            if (name || msg) {
+                const injectionScript = `<script>
+                    window.injectedData = {
+                        name: "${name ? name.replace(/"/g, '\\"') : ''}",
+                        msg: "${msg ? msg.replace(/"/g, '\\"') : ''}"
+                    };
+                <\/script>`;
+                finalHtml = finalHtml.replace('<head>', '<head>' + injectionScript);
+            }
+
             festivalViewer.innerHTML = ''; 
             const iframe = document.createElement('iframe');
-            iframe.srcdoc = itemData.htmlContent;
+            iframe.srcdoc = finalHtml;
             const backButton = document.createElement('button');
             backButton.className = 'back-button';
             backButton.innerHTML = '←';
@@ -210,7 +227,6 @@ const firebaseConfig = {
     window.addEventListener('message', (event) => {
         if (event.data && event.data.action === 'share') {
             const { name, msg } = event.data;
-            // MODIFIED: This now creates the full URL with name and message.
             const urlToShare = `${window.location.origin}${window.location.pathname}?id=${currentItemId}&name=${encodeURIComponent(name)}&msg=${encodeURIComponent(msg)}`;
             const shareText = `*${name} ki taraf se:*\n\n_${msg}_\n\n👇 Check it out here 👇\n${urlToShare}`;
             const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
@@ -280,7 +296,6 @@ const firebaseConfig = {
         mainContent.style.display = 'block';
         festivalViewer.style.display = 'none';
         renderAllCards(searchInput.value.toLowerCase().trim());
-        // Ensure event listener is only added once
         if (!searchInput.dataset.listener) {
             searchInput.addEventListener('input', (e) => {
                 renderAllCards(e.target.value.toLowerCase().trim());
