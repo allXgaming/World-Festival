@@ -155,12 +155,9 @@
 
   <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js" type="module"></script>
   <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js" type="module"></script>
-
-  <!-- MODIFIED: Restructured the main logic for correct URL handling -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCDX-qcAdJP0pHMHnFc0D3ZFlod16JxyII",
@@ -172,7 +169,6 @@ const firebaseConfig = {
   appId: "1:76668449827:web:953c691961671cc8b62d96",
   measurementId: "G-BGE1GEK8VZ"
 };
-
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     let allItems = [];
@@ -198,7 +194,6 @@ const firebaseConfig = {
             mainContent.style.display = 'none';
             festivalViewer.style.display = 'block';
         } else {
-            // If item not found (maybe bad ID in URL), show homepage
             console.error("Item not found for ID:", itemId);
             renderHomepage();
         }
@@ -209,14 +204,14 @@ const firebaseConfig = {
         festivalViewer.innerHTML = '';
         mainContent.style.display = 'block';
         currentItemId = null;
-        // This removes the "?id=..." from the URL without reloading the page
         window.history.pushState({}, '', window.location.pathname);
     };
 
     window.addEventListener('message', (event) => {
         if (event.data && event.data.action === 'share') {
             const { name, msg } = event.data;
-            const urlToShare = `${window.location.origin}${window.location.pathname}?id=${currentItemId}`;
+            // MODIFIED: This now creates the full URL with name and message.
+            const urlToShare = `${window.location.origin}${window.location.pathname}?id=${currentItemId}&name=${encodeURIComponent(name)}&msg=${encodeURIComponent(msg)}`;
             const shareText = `*${name} ki taraf se:*\n\n_${msg}_\n\n👇 Check it out here 👇\n${urlToShare}`;
             const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
             window.open(whatsappUrl, '_blank');
@@ -281,36 +276,29 @@ const firebaseConfig = {
         document.getElementById('coming-soon-section').style.display = comingSoonGrid.hasChildNodes() ? 'block' : 'none';
     }
 
-    // A function just for rendering the homepage grid
     function renderHomepage() {
         mainContent.style.display = 'block';
         festivalViewer.style.display = 'none';
-        renderAllCards();
-        searchInput.addEventListener('input', (e) => {
-            renderAllCards(e.target.value.toLowerCase().trim());
-        });
-    }
-
-    // This is the main function that runs on page load.
-    async function main() {
-        // Step 1: Always load the data first.
-        allItems = await loadItemsFromFirestore();
-        
-        // Step 2: Check the URL for an ID.
-        const params = new URLSearchParams(window.location.search);
-        const festivalIdFromUrl = params.get('id');
-
-        // Step 3: Decide what to show.
-        if (festivalIdFromUrl) {
-            // If ID exists, show that specific festival.
-            showFestival(festivalIdFromUrl);
-        } else {
-            // If no ID, show the homepage.
-            renderHomepage();
+        renderAllCards(searchInput.value.toLowerCase().trim());
+        // Ensure event listener is only added once
+        if (!searchInput.dataset.listener) {
+            searchInput.addEventListener('input', (e) => {
+                renderAllCards(e.target.value.toLowerCase().trim());
+            });
+            searchInput.dataset.listener = "true";
         }
     }
 
-    // Run the app!
+    async function main() {
+        allItems = await loadItemsFromFirestore();
+        const params = new URLSearchParams(window.location.search);
+        const festivalIdFromUrl = params.get('id');
+        if (festivalIdFromUrl) {
+            showFestival(festivalIdFromUrl);
+        } else {
+            renderHomepage();
+        }
+    }
     main();
   </script>
 </body>
