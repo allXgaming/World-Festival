@@ -16,7 +16,6 @@
       background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
       color: white;
     }
-    /* Main list container */
     .main-content {
       padding: 5px;
     }
@@ -65,7 +64,7 @@
     .card:hover {
       transform: scale(1.05);
     }
-    .card-link { /* Modified from <a> to <div> */
+    .card-link {
       text-decoration: none;
       color: white;
       display: flex;
@@ -88,10 +87,8 @@
             0 0 8px #00f2ff,
             0 0 12px #ff00ff;
     }
-
-    /* NEW: Festival Viewer Container */
     .festival-viewer {
-        display: none; /* Hidden by default */
+        display: none;
         position: fixed;
         top: 0;
         left: 0;
@@ -99,10 +96,8 @@
         height: 100%;
         background-color: #0f0c29;
         z-index: 1000;
-        overflow: auto; /* To allow scrolling if content is long */
+        overflow: hidden;
     }
-
-    /* NEW: Back button style */
     .back-button {
         position: fixed;
         top: 15px;
@@ -121,6 +116,13 @@
         justify-content: center;
     }
     
+    /* MODIFIED: Iframe styling */
+    .festival-viewer iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
     @media (max-width: 500px) {
       header h1 { font-size: 1.8rem; }
       section h2 { font-size: 1.3rem; }
@@ -131,7 +133,6 @@
 </head>
 <body>
     
-  <!-- This container holds the main festival list view -->
   <div class="main-content" id="mainContent">
     <header>
       <h1>World X Festival</h1>
@@ -156,7 +157,6 @@
     </section>
   </div>
 
-  <!-- NEW: This div is where the festival HTML will be injected -->
   <div class="festival-viewer" id="festivalViewer"></div>
 
   <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js" type="module"></script>
@@ -182,24 +182,30 @@ const firebaseConfig = {
     const db = getFirestore(app);
     let allItems = [];
 
-    // DOM Elements
     const mainContent = document.getElementById('mainContent');
     const festivalViewer = document.getElementById('festivalViewer');
     const searchInput = document.getElementById('searchInput');
 
-    // MODIFIED: Function to show a festival inside the viewer
+    // MODIFIED: This function now uses an iframe to correctly run scripts.
     const showFestival = (itemId) => {
         const itemData = allItems.find(item => item.id === itemId);
         if (itemData && itemData.htmlContent) {
+            // Clear previous content
+            festivalViewer.innerHTML = ''; 
+
+            // Create and configure the iframe
+            const iframe = document.createElement('iframe');
+            iframe.srcdoc = itemData.htmlContent; // This loads the HTML and runs its scripts
+            
             // Create a back button
             const backButton = document.createElement('button');
             backButton.className = 'back-button';
             backButton.innerHTML = '←';
             backButton.onclick = hideFestival;
 
-            // Inject the HTML content and the back button
-            festivalViewer.innerHTML = itemData.htmlContent;
-            festivalViewer.prepend(backButton);
+            // Append the new elements
+            festivalViewer.appendChild(backButton);
+            festivalViewer.appendChild(iframe);
 
             // Hide the main list and show the viewer
             mainContent.style.display = 'none';
@@ -209,10 +215,9 @@ const firebaseConfig = {
         }
     };
 
-    // NEW: Function to hide the viewer and show the main list again
     const hideFestival = () => {
         festivalViewer.style.display = 'none';
-        festivalViewer.innerHTML = ''; // Clear the content
+        festivalViewer.innerHTML = '';
         mainContent.style.display = 'block';
     };
     
@@ -237,14 +242,12 @@ const firebaseConfig = {
     function createCardElement(item) {
         const card = document.createElement('div');
         card.className = 'card';
-        // MODIFIED: No <a> tag. Instead, a div with a data-id attribute.
         card.innerHTML = `
             <div class="card-link" data-id="${item.id}">
                 <img src="${item.logoUrl || 'https://via.placeholder.com/100'}" alt="${item.title} Logo" class="festival-card-logo">
                 <h3>${item.title}</h3>
             </div>
         `;
-        // NEW: Add click event listener to the card itself
         card.querySelector('.card-link').addEventListener('click', () => {
             showFestival(item.id);
         });
@@ -291,7 +294,6 @@ const firebaseConfig = {
         document.getElementById('coming-soon-section').style.display = comingSoonGrid.hasChildNodes() ? 'block' : 'none';
     }
 
-    // Initialize the main page
     initializeGrid();
   </script>
 </body>
