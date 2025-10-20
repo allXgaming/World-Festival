@@ -15,6 +15,8 @@
     body {
       background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
       color: white;
+    }
+    .main-content {
       padding: 5px;
     }
     header {
@@ -95,52 +97,117 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>World X Festival</h1>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search by festival, month, or country...">
-    </div>
-  </header>
+    
+  <div class="main-content" id="mainContent">
+    <header>
+      <h1>World X Festival</h1>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search by festival, month, or country...">
+      </div>
+    </header>
 
-  <section id="this-month-section">
-    <h2 id="main-section-title">This Month's Festivals</h2>
-    <div class="card-grid" id="festivals-grid"></div>
-  </section>
-  
-  <section id="daily-use-section">
-    <h2>Daily Use</h2>
-    <div class="card-grid" id="daily-use-grid"></div>
-  </section>
+    <section id="daily-use-section">
+      <h2>Daily Use</h2>
+      <div class="card-grid" id="daily-use-grid"></div>
+    </section>
+    
+    <section id="this-month-section">
+      <h2 id="main-section-title">This Month</h2>
+      <div class="card-grid" id="this-month-grid"></div>
+    </section>
 
-  <section id="coming-soon-section">
-    <h2>Coming Soon</h2>
-    <div class="card-grid" id="coming-soon-grid"></div>
-  </section>
+    <section id="coming-soon-section">
+      <h2>Coming Soon</h2>
+      <div class="card-grid" id="coming-soon-grid"></div>
+    </section>
+  </div>
 
-  <script>
-    const allFestivals = [
-        { no: '1', id: 'rakhi', category: 'festival', title: 'Raksha Bandhan', logoUrl: 'https://i.postimg.cc/SsYg1Fsd/rakhi.gif', month: 'August', country: 'India' },
-        { no: '2', id: 'christmas', category: 'comingSoon', title: 'Christmas', logoUrl: 'https://i.postimg.cc/SxSZ4HFp/image-search-1754686967579.gif:', month: 'December', country: 'Global' },
-        { no: '3', id: 'goodmorning', category: 'dailyUse', title: 'Good Morning', logoUrl: 'https://i.postimg.cc/fRt2G80f/In-Shot-20250624-214417550.gif', month: 'August', country: 'Global' },
-        { no: '4', id: 'halloween', category: 'comingSoon', title: 'Halloween', logoUrl: 'https://i.postimg.cc/Kc5vjg3h/image-search-1754686517275.gif', month: 'October', country: 'India' },
-        { no: '5', id: 'teachersday', category: 'festival', title: 'Teachers Day', logoUrl: 'https://i.postimg.cc/P57qhspL/image-search-1754569503339.gif', month: 'September', country: 'India' },
-        { no: '6', id: 'janmashtami', category: 'festival', title: 'Janmashtami', logoUrl: 'https://i.postimg.cc/6Q1L2JBJ/giphy.gif', month: 'August', country: 'India' },
-        { no: '7', id: 'ganeshchaturthi', category: 'festival', title: 'Ganesh Chaturthi', logoUrl: 'https://i.postimg.cc/TwTKvbC3/Create-Ganesh-Chaturthi-2023-Animated-Wishes-Link-with-Name.gif', month: 'August', country: 'India' },
-        { no: '8', id: 'diwali', category: 'comingSoon', title: 'Diwali', logoUrl: 'https://i.postimg.cc/Vv27mN8G/image-search-1754686852390.gif', month: 'October', country: 'India' },
-        { no: '9', id: 'happybirthday', category: 'dailyUse', title: 'Happy Birthday', logoUrl: 'https://i.postimg.cc/sXMTLZ7C/In-Shot-20250523-203835219.gif', month: '', country: '' },
-        { no: '10', id: 'newyear2026', category: 'comingSoon', title: 'New Year 2026', logoUrl: 'https://i.postimg.cc/63f2BbxD/image-search-1754687191880.gif', month: 'January', country: 'Global' }
-    ];
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js" type="module"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js" type="module"></script>
 
-    const searchInput = document.getElementById('searchInput');
-    const festivalsGrid = document.getElementById('festivals-grid');
-    const comingSoonGrid = document.getElementById('coming-soon-grid');
-    const dailyUseGrid = document.getElementById('daily-use-grid');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCDX-qcAdJP0pHMHnFc0D3ZFlod16JxyII",
+  authDomain: "testing-5-f9d4c.firebaseapp.com",
+  databaseURL: "https://testing-5-f9d4c-default-rtdb.firebaseio.com",
+  projectId: "testing-5-f9d4c",
+  storageBucket: "testing-5-f9d4c.firebasestorage.app",
+  messagingSenderId: "76668449827",
+  appId: "1:76668449827:web:953c691961671cc8b62d96",
+  measurementId: "G-BGE1GEK8VZ"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    let allItems = [];
+
+    async function handlePageLoad() {
+        const params = new URLSearchParams(window.location.search);
+        const festivalId = params.get('id');
+
+        if (festivalId) {
+            await displayFestivalContent(festivalId);
+        } else {
+            await displayFestivalGrid();
+        }
+    }
+    
+    async function displayFestivalContent(festivalId) {
+        // MODIFIED: The "Loading..." message has been removed.
+        try {
+            const festivalsRef = collection(db, "festivals");
+            const q = query(festivalsRef, where("id", "==", festivalId));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                document.body.innerHTML = `<h1>Error: Item not found.</h1>`;
+                return;
+            }
+
+            const festivalData = querySnapshot.docs[0].data();
+            if (festivalData && festivalData.htmlContent) {
+                document.open();
+                document.write(festivalData.htmlContent);
+                document.close();
+            } else {
+                document.body.innerHTML = '<h1>Error: HTML content not found.</h1>';
+            }
+        } catch (error) {
+            console.error("Error loading content:", error);
+            document.body.innerHTML = '<h1>Error loading content.</h1>';
+        }
+    }
+    
+    async function displayFestivalGrid() {
+        const searchInput = document.getElementById('searchInput');
+        
+        allItems = await loadItemsFromFirestore();
+        renderAllCards();
+
+        searchInput.addEventListener('input', (e) => {
+            renderAllCards(e.target.value.toLowerCase().trim());
+        });
+    }
+
+    async function loadItemsFromFirestore() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "festivals"));
+        return querySnapshot.docs.map(doc => ({ ...doc.data() }));
+      } catch (error) {
+        console.error("Error fetching data from Firestore: ", error);
+        return [];
+      }
+    }
 
     function createCardElement(item) {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-            <a href="${item.id}.html">
+            <a href="festival.html?id=${item.id}">
                 <img src="${item.logoUrl || 'https://via.placeholder.com/100'}" alt="${item.title} Logo" class="festival-card-logo" onerror="this.src='https://via.placeholder.com/100'">
                 <h3>${item.title}</h3>
             </a>
@@ -148,63 +215,47 @@
         return card;
     }
 
-    function renderAllCards(filter = '') {
-        festivalsGrid.innerHTML = '';
+    function renderAllCards(searchText = '') {
+        const thisMonthGrid = document.getElementById('this-month-grid');
+        const comingSoonGrid = document.getElementById('coming-soon-grid');
+        const dailyUseGrid = document.getElementById('daily-use-grid');
+
+        if (!thisMonthGrid || !comingSoonGrid || !dailyUseGrid) return;
+
+        thisMonthGrid.innerHTML = '';
         comingSoonGrid.innerHTML = '';
         dailyUseGrid.innerHTML = '';
 
-        const now = new Date();
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        const currentMonthName = monthNames[now.getMonth()].toLowerCase();
-        const nextMonthName = monthNames[(now.getMonth() + 1) % 12].toLowerCase();
+        let filteredList = allItems;
 
-        document.getElementById('main-section-title').textContent = `${monthNames[now.getMonth()]} Festivals`;
-        
-        const filteredList = filter
-            ? allFestivals.filter(item => 
-                item.title.toLowerCase().includes(filter) ||
-                item.month.toLowerCase().includes(filter) ||
-                item.country.toLowerCase().includes(filter)
-              )
-            : allFestivals;
+        if (searchText) {
+            filteredList = filteredList.filter(item => 
+                item.title.toLowerCase().includes(searchText) ||
+                (item.month && item.month.toLowerCase().includes(searchText)) ||
+                (item.country && item.country.toLowerCase().includes(searchText))
+            );
+        }
 
         filteredList.forEach(item => {
             const cardEl = createCardElement(item);
-            const itemMonth = item.month.toLowerCase();
-
-            if (item.category === 'festival' && itemMonth === currentMonthName) {
-                festivalsGrid.appendChild(cardEl);
+            
+            if (item.category === 'thisMonth') {
+                thisMonthGrid.appendChild(cardEl);
             } 
             else if (item.category === 'dailyUse') {
                 dailyUseGrid.appendChild(cardEl);
             }
-            else if (item.category === 'comingSoon' || (item.category === 'festival' && itemMonth === nextMonthName)) {
+            else if (item.category === 'comingSoon') {
                 comingSoonGrid.appendChild(cardEl);
             }
         });
 
-        document.getElementById('this-month-section').style.display = festivalsGrid.hasChildNodes() ? 'block' : 'none';
+        document.getElementById('this-month-section').style.display = thisMonthGrid.hasChildNodes() ? 'block' : 'none';
         document.getElementById('daily-use-section').style.display = dailyUseGrid.hasChildNodes() ? 'block' : 'none';
         document.getElementById('coming-soon-section').style.display = comingSoonGrid.hasChildNodes() ? 'block' : 'none';
     }
 
-    renderAllCards();
-
-    searchInput.addEventListener('input', (e) => {
-        renderAllCards(e.target.value.toLowerCase().trim());
-    });
+    handlePageLoad();
   </script>
 </body>
-<script async="async" data-cfasync="false" src="//breakdowninsinuateeliza.com/16e760128b8a492881b23188e0e0a0c2/invoke.js"></script>
-<div id="container-16e760128b8a492881b23188e0e0a0c2"></div>
 </html>
-<script type="text/javascript">
-	atOptions = {
-		'key' : 'a07a39e10a3bd9f27ae52751e4f94e88',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//breakdowninsinuateeliza.com/a07a39e10a3bd9f27ae52751e4f94e88/invoke.js"></script>
