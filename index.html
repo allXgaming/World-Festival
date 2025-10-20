@@ -178,7 +178,6 @@ const firebaseConfig = {
     const festivalViewer = document.getElementById('festivalViewer');
     const searchInput = document.getElementById('searchInput');
 
-    // MODIFIED: This function now injects URL parameters into the iframe content.
     const showFestival = (itemId) => {
         currentItemId = itemId;
         const itemData = allItems.find(item => item.id === itemId);
@@ -188,7 +187,6 @@ const firebaseConfig = {
             const name = params.get('name');
             const msg = params.get('msg');
             
-            // Inject a script into the iframe's head to pass the data
             if (name || msg) {
                 const injectionScript = `<script>
                     window.injectedData = {
@@ -216,12 +214,14 @@ const firebaseConfig = {
         }
     };
 
+    // MODIFIED: This function now calls renderHomepage() to rebuild the list.
     const hideFestival = () => {
         festivalViewer.style.display = 'none';
         festivalViewer.innerHTML = '';
-        mainContent.style.display = 'block';
         currentItemId = null;
         window.history.pushState({}, '', window.location.pathname);
+        // This is the key change: It rebuilds and shows the homepage.
+        renderHomepage();
     };
 
     window.addEventListener('message', (event) => {
