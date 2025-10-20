@@ -16,8 +16,10 @@
       background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
       color: white;
     }
+    /* NEW: Hide main content by default to prevent flashing */
     .main-content {
       padding: 5px;
+      display: none; /* This will be overridden by JS when needed */
     }
     header {
       text-align: center;
@@ -214,13 +216,11 @@ const firebaseConfig = {
         }
     };
 
-    // MODIFIED: This function now calls renderHomepage() to rebuild the list.
     const hideFestival = () => {
         festivalViewer.style.display = 'none';
         festivalViewer.innerHTML = '';
         currentItemId = null;
         window.history.pushState({}, '', window.location.pathname);
-        // This is the key change: It rebuilds and shows the homepage.
         renderHomepage();
     };
 
@@ -293,7 +293,8 @@ const firebaseConfig = {
     }
 
     function renderHomepage() {
-        mainContent.style.display = 'block';
+        // MODIFIED: This line now makes the homepage visible.
+        mainContent.style.display = 'block'; 
         festivalViewer.style.display = 'none';
         renderAllCards(searchInput.value.toLowerCase().trim());
         if (!searchInput.dataset.listener) {
