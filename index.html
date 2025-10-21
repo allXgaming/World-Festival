@@ -99,7 +99,7 @@
         pointer-events: none; /* Disables clicking */
     }
     .card.locked::after {
-        content: '🔒';
+        content: '🕒';
         position: absolute;
         top: 50%;
         left: 50%;
@@ -184,14 +184,17 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCDX-qcAdJP0pHMHnFc0D3ZFlod16JxyII",
+  authDomain: "testing-5-f9d4c.firebaseapp.com",
+  databaseURL: "https://testing-5-f9d4c-default-rtdb.firebaseio.com",
+  projectId: "testing-5-f9d4c",
+  storageBucket: "testing-5-f9d4c.firebasestorage.app",
+  messagingSenderId: "76668449827",
+  appId: "1:76668449827:web:953c691961671cc8b62d96",
+  measurementId: "G-BGE1GEK8VZ"
+};
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     let allItems = [];
