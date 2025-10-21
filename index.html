@@ -16,10 +16,9 @@
       background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
       color: white;
     }
-    /* NEW: Hide main content by default to prevent flashing */
     .main-content {
       padding: 5px;
-      display: none; /* This will be overridden by JS when needed */
+      display: none;
     }
     header {
       text-align: center;
@@ -62,6 +61,7 @@
     .card {
         transition: 0.3s;
         cursor: pointer;
+        position: relative; /* Needed for the lock icon */
     }
     .card:hover {
       transform: scale(1.05);
@@ -89,6 +89,30 @@
             0 0 8px #00f2ff,
             0 0 12px #ff00ff;
     }
+
+    /* NEW: Styles for the locked "Coming Soon" cards */
+    .card.locked {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    .card.locked .card-link {
+        pointer-events: none; /* Disables clicking */
+    }
+    .card.locked::after {
+        content: '🔒';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2.5rem;
+        color: white;
+        text-shadow: 0 0 8px black;
+        opacity: 0.8;
+    }
+    .card.locked:hover {
+        transform: scale(1); /* Disable hover effect for locked cards */
+    }
+
     .festival-viewer {
         display: none;
         position: fixed;
@@ -160,17 +184,14 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCDX-qcAdJP0pHMHnFc0D3ZFlod16JxyII",
-  authDomain: "testing-5-f9d4c.firebaseapp.com",
-  databaseURL: "https://testing-5-f9d4c-default-rtdb.firebaseio.com",
-  projectId: "testing-5-f9d4c",
-  storageBucket: "testing-5-f9d4c.firebasestorage.app",
-  messagingSenderId: "76668449827",
-  appId: "1:76668449827:web:953c691961671cc8b62d96",
-  measurementId: "G-BGE1GEK8VZ"
-};
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     let allItems = [];
@@ -244,21 +265,27 @@ const firebaseConfig = {
       }
     }
 
-    function createCardElement(item) {
+    // MODIFIED: Function now accepts a parameter to lock the card
+    function createCardElement(item, isLocked = false) {
         const card = document.createElement('div');
-        card.className = 'card';
+        // Add the 'locked' class if the item is meant to be locked
+        card.className = isLocked ? 'card locked' : 'card';
         card.innerHTML = `
             <div class="card-link" data-id="${item.id}">
                 <img src="${item.logoUrl || 'https://via.placeholder.com/100'}" alt="${item.title} Logo" class="festival-card-logo">
                 <h3>${item.title}</h3>
             </div>
         `;
-        card.querySelector('.card-link').addEventListener('click', () => {
-            showFestival(item.id);
-        });
+        // Only add a click listener if the card is NOT locked
+        if (!isLocked) {
+            card.querySelector('.card-link').addEventListener('click', () => {
+                showFestival(item.id);
+            });
+        }
         return card;
     }
 
+    // MODIFIED: This function now contains all the new date and locking logic
     function renderAllCards(searchText = '') {
         const thisMonthGrid = document.getElementById('this-month-grid');
         const comingSoonGrid = document.getElementById('coming-soon-grid');
@@ -267,6 +294,13 @@ const firebaseConfig = {
         thisMonthGrid.innerHTML = '';
         comingSoonGrid.innerHTML = '';
         dailyUseGrid.innerHTML = '';
+
+        // NEW: Date logic to determine current and next month
+        const now = new Date();
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const currentMonthName = monthNames[now.getMonth()];
+        const nextMonthName = monthNames[(now.getMonth() + 1) % 12]; // % 12 handles December -> January wrap-around
+
         let filteredList = allItems;
         if (searchText) {
             filteredList = filteredList.filter(item => 
@@ -275,25 +309,30 @@ const firebaseConfig = {
                 (item.country && item.country.toLowerCase().includes(searchText))
             );
         }
+
         filteredList.forEach(item => {
-            const cardEl = createCardElement(item);
-            if (item.category === 'thisMonth') {
-                thisMonthGrid.appendChild(cardEl);
-            } 
-            else if (item.category === 'dailyUse') {
+            const itemMonth = item.month || '';
+
+            if (item.category === 'dailyUse') {
+                const cardEl = createCardElement(item, false); // Daily Use is never locked
                 dailyUseGrid.appendChild(cardEl);
+            } 
+            else if (item.category === 'thisMonth' && itemMonth.toLowerCase() === currentMonthName.toLowerCase()) {
+                const cardEl = createCardElement(item, false); // Current month is not locked
+                thisMonthGrid.appendChild(cardEl);
             }
-            else if (item.category === 'comingSoon') {
+            else if (item.category === 'comingSoon' || (item.category === 'thisMonth' && itemMonth.toLowerCase() === nextMonthName.toLowerCase())) {
+                const cardEl = createCardElement(item, true); // Next month or 'Coming Soon' category are locked
                 comingSoonGrid.appendChild(cardEl);
             }
         });
+
         document.getElementById('this-month-section').style.display = thisMonthGrid.hasChildNodes() ? 'block' : 'none';
         document.getElementById('daily-use-section').style.display = dailyUseGrid.hasChildNodes() ? 'block' : 'none';
         document.getElementById('coming-soon-section').style.display = comingSoonGrid.hasChildNodes() ? 'block' : 'none';
     }
 
     function renderHomepage() {
-        // MODIFIED: This line now makes the homepage visible.
         mainContent.style.display = 'block'; 
         festivalViewer.style.display = 'none';
         renderAllCards(searchInput.value.toLowerCase().trim());
