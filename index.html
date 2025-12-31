@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>World X Festival</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -12,107 +12,227 @@
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
     }
+
     body {
-      background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
-      color: white;
+      background-color: #f8f9fc;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
+
     .main-content {
-      padding: 5px;
-      display: none;
+      flex: 1;
+      padding-bottom: 20px;
     }
+
+    /* HEADER DESIGN */
     header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px 20px 60px 20px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
       text-align: center;
-      margin-bottom: 10px;
-      padding: 5px 0;
+      box-shadow: 0 10px 30px rgba(118, 75, 162, 0.3);
+      position: relative;
+      margin-bottom: 30px;
     }
+
     header h1 {
-      font-size: 2rem;
-      text-shadow: 0 0 5px cyan;
+      font-size: 2.2rem;
+      color: white;
+      font-weight: 700;
+      margin-bottom: 15px;
+      letter-spacing: 0.5px;
     }
+
+    /* SEARCH BOX */
     .search-box {
-      max-width: 350px;
-      margin: 10px auto;
+      max-width: 400px;
+      margin: 0 auto;
+      position: relative;
+      transform: translateY(20px);
     }
+
     .search-box input {
       width: 100%;
-      padding: 8px;
-      border-radius: 20px;
+      padding: 16px 25px;
+      border-radius: 30px;
       border: none;
       outline: none;
-      font-size: 0.9rem;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
+      font-size: 1rem;
+      text-align: left;
+      background: white;
+      color: #555;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: 0.3s ease;
     }
+
+    .search-box input:focus {
+      box-shadow: 0 15px 35px rgba(118, 75, 162, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* SECTIONS */
     section {
-      margin-top: 15px;
+      padding: 0 20px;
+      margin-top: 30px;
+      display: none; /* Hidden by default, shown via JS */
     }
+
     section h2 {
-      font-size: 1.4rem;
-      margin-bottom: 10px;
-      border-left: 3px solid #00f2ff;
-      padding-left: 8px;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #2d3748;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
     }
+
+    section h2::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    /* CARD GRID */
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px; 
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
     }
+
+    /* CARD DESIGN */
     .card {
-        transition: 0.3s;
+        background: transparent;
+        border-radius: 15px;
+        padding: 10px;
+        transition: 0.3s ease;
         cursor: pointer;
-        position: relative; /* Needed for the lock icon */
+        position: relative;
+        text-align: center;
     }
+
     .card:hover {
-      transform: scale(1.05);
+        transform: scale(1.05);
     }
+
     .card-link {
       text-decoration: none;
-      color: white;
+      color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
       height: 100%;
+      justify-content: start;
     }
+
     .festival-card-logo {
-      width: 85px;
-      height: 85px;
+      width: 75px;
+      height: 75px;
       object-fit: cover;
-      margin-bottom: 8px;
-      border-radius: 10px;
+      margin-bottom: 10px;
+      border-radius: 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+      background-color: #eee; /* Placeholder color before load */
     }
+
     .card h3 {
         font-size: 0.9rem; 
-        font-weight: 500;
-        text-shadow: 
-            0 0 4px #fff,
-            0 0 8px #00f2ff,
-            0 0 12px #ff00ff;
+        font-weight: 600;
+        text-align: center;
+        color: #4a5568;
+        line-height: 1.3;
     }
 
-    /* NEW: Styles for the locked "Coming Soon" cards */
+    /* LOCKED CARDS */
     .card.locked {
-        opacity: 0.6;
         cursor: not-allowed;
+        opacity: 0.5;
+        filter: grayscale(100%);
     }
+    
     .card.locked .card-link {
-        pointer-events: none; /* Disables clicking */
-    }
-    .card.locked::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 2.5rem;
-        color: white;
-        text-shadow: 0 0 8px black;
-        opacity: 0.8;
-    }
-    .card.locked:hover {
-        transform: scale(1); /* Disable hover effect for locked cards */
+        pointer-events: none;
     }
 
+    .card.locked:hover {
+        transform: none;
+    }
+
+    /* SKELETON LOADING ANIMATION */
+    .skeleton-wrapper {
+        padding: 0 20px;
+        margin-top: 30px;
+    }
+    .skeleton-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .skeleton-img {
+        width: 75px;
+        height: 75px;
+        border-radius: 18px;
+        background: #e0e0e0;
+        margin-bottom: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+    .skeleton-text {
+        width: 80%;
+        height: 12px;
+        background: #e0e0e0;
+        border-radius: 4px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Shimmer Effect */
+    .skeleton-img::after, .skeleton-text::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+        animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* NO RESULTS STATE */
+    .no-results {
+        text-align: center;
+        padding: 50px 20px;
+        display: none;
+        color: #718096;
+    }
+    .no-results-icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        display: block;
+        opacity: 0.5;
+    }
+
+    /* FOOTER DESIGN */
+    .app-footer {
+        text-align: center;
+        padding: 30px 20px;
+        margin-top: 40px;
+        color: #a0aec0;
+        font-size: 0.85rem;
+    }
+
+    /* VIEWER & BACK BUTTON */
     .festival-viewer {
         display: none;
         position: fixed;
@@ -120,37 +240,48 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #0f0c29;
+        background-color: #fff;
         z-index: 1000;
-        overflow: hidden;
     }
+
     .back-button {
         position: fixed;
-        top: 15px;
-        left: 15px;
+        top: 20px;
+        left: 20px;
         z-index: 1001;
-        background-color: rgba(0, 0, 0, 0.5);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        border: 1px solid #00f2ff;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        border: none;
+        border-radius: 12px;
+        width: 45px;
+        height: 45px;
         font-size: 20px;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+        transition: 0.3s;
     }
+
+    .back-button:hover {
+        transform: scale(1.1);
+    }
+
     .festival-viewer iframe {
         width: 100%;
         height: 100%;
         border: none;
     }
+
     @media (max-width: 500px) {
+      header { padding: 30px 15px 50px 15px; }
       header h1 { font-size: 1.8rem; }
-      section h2 { font-size: 1.3rem; }
-      .card-grid { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
-      .festival-card-logo { width: 100px; height: 100px; } 
+      .search-box input { padding: 12px 20px; }
+      .card-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .festival-card-logo { width: 60px; height: 60px; }
+      .skeleton-img { width: 60px; height: 60px; }
+      .card h3 { font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -160,11 +291,23 @@
     <header>
       <h1>World X Festival</h1>
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search by festival, month, or country...">
+        <input type="text" id="searchInput" placeholder="Search festivals...">
       </div>
     </header>
+
+    <!-- SKELETON LOADING (Shown initially) -->
+    <div id="skeleton-container" class="skeleton-wrapper">
+        <div class="card-grid">
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div></div>
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div></div>
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div></div>
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div></div>
+        </div>
+    </div>
+
+    <!-- CONTENT SECTIONS -->
     <section id="daily-use-section">
-      <h2>Daily Use</h2>
+      <h2>Daily Essentials</h2>
       <div class="card-grid" id="daily-use-grid"></div>
     </section>
     <section id="this-month-section">
@@ -175,6 +318,18 @@
       <h2>Coming Soon</h2>
       <div class="card-grid" id="coming-soon-grid"></div>
     </section>
+
+    <!-- NO RESULTS MESSAGE -->
+    <div id="no-results" class="no-results">
+        <span class="no-results-icon">🔍</span>
+        <h3>No festivals found</h3>
+        <p>Try searching for a different name or category.</p>
+    </div>
+
+    <footer class="app-footer">
+        <p>&copy; 2025 World X Festival.</p>
+    </footer>
+
   </div>
 
   <div class="festival-viewer" id="festivalViewer"></div>
@@ -183,27 +338,33 @@
   <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js" type="module"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDHB9nPSUXju9iWNlaAsze1dsvZkD9iYLw",
-  authDomain: "worldxfestival.firebaseapp.com",
-  databaseURL: "https://worldxfestival-default-rtdb.firebaseio.com",
-  projectId: "worldxfestival",
-  storageBucket: "worldxfestival.firebasestorage.app",
-  messagingSenderId: "1008928581835",
-  appId: "1:1008928581835:web:345ec7913d27b15adad34e",
-  measurementId: "G-L6Y4XTE78X"
-};
+    // ADDED: onSnapshot for Real-time updates
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHB9nPSUXju9iWNlaAsze1dsvZkD9iYLw",
+      authDomain: "worldxfestival.firebaseapp.com",
+      databaseURL: "https://worldxfestival-default-rtdb.firebaseio.com",
+      projectId: "worldxfestival",
+      storageBucket: "worldxfestival.firebasestorage.app",
+      messagingSenderId: "1008928581835",
+      appId: "1:1008928581835:web:345ec7913d27b15adad34e",
+      measurementId: "G-L6Y4XTE78X"
+    };
+    
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     let allItems = [];
     let currentItemId = null;
+    let currentRenderedMonthIndex = new Date().getMonth(); // To track time changes
 
     const mainContent = document.getElementById('mainContent');
     const festivalViewer = document.getElementById('festivalViewer');
     const searchInput = document.getElementById('searchInput');
+    const skeletonContainer = document.getElementById('skeleton-container');
+    const noResultsDiv = document.getElementById('no-results');
 
+    // === VIEWER LOGIC ===
     const showFestival = (itemId) => {
         currentItemId = itemId;
         const itemData = allItems.find(item => item.id === itemId);
@@ -228,14 +389,13 @@ const firebaseConfig = {
             iframe.srcdoc = finalHtml;
             const backButton = document.createElement('button');
             backButton.className = 'back-button';
-            backButton.innerHTML = '←';
+            backButton.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>';
             backButton.onclick = hideFestival;
             festivalViewer.appendChild(backButton);
             festivalViewer.appendChild(iframe);
             mainContent.style.display = 'none';
             festivalViewer.style.display = 'block';
         } else {
-            console.error("Item not found for ID:", itemId);
             renderHomepage();
         }
     };
@@ -258,28 +418,20 @@ const firebaseConfig = {
         }
     });
 
-    async function loadItemsFromFirestore() {
-      try {
-        const querySnapshot = await getDocs(collection(db, "festivals"));
-        return querySnapshot.docs.map(doc => ({ ...doc.data() }));
-      } catch (error) {
-        console.error("Error fetching data from Firestore: ", error);
-        return [];
-      }
-    }
-
-    // MODIFIED: Function now accepts a parameter to lock the card
+    // === CARD CREATION ===
     function createCardElement(item, isLocked = false) {
         const card = document.createElement('div');
-        // Add the 'locked' class if the item is meant to be locked
         card.className = isLocked ? 'card locked' : 'card';
+        // FEATURE: Lazy Loading added
         card.innerHTML = `
             <div class="card-link" data-id="${item.id}">
-                <img src="${item.logoUrl || 'https://via.placeholder.com/100'}" alt="${item.title} Logo" class="festival-card-logo">
+                <img src="${item.logoUrl || 'https://via.placeholder.com/100'}" 
+                     alt="${item.title} Logo" 
+                     class="festival-card-logo"
+                     loading="lazy"> 
                 <h3>${item.title}</h3>
             </div>
         `;
-        // Only add a click listener if the card is NOT locked
         if (!isLocked) {
             card.querySelector('.card-link').addEventListener('click', () => {
                 showFestival(item.id);
@@ -288,21 +440,28 @@ const firebaseConfig = {
         return card;
     }
 
-    // MODIFIED: This function now contains all the new date and locking logic
+    // === RENDER LOGIC ===
     function renderAllCards(searchText = '') {
         const thisMonthGrid = document.getElementById('this-month-grid');
         const comingSoonGrid = document.getElementById('coming-soon-grid');
         const dailyUseGrid = document.getElementById('daily-use-grid');
-        if (!thisMonthGrid || !comingSoonGrid || !dailyUseGrid) return;
+        
+        // Clear previous content
         thisMonthGrid.innerHTML = '';
         comingSoonGrid.innerHTML = '';
         dailyUseGrid.innerHTML = '';
+        
+        // Hide sections initially (to show No Results if needed)
+        document.getElementById('this-month-section').style.display = 'none';
+        document.getElementById('daily-use-section').style.display = 'none';
+        document.getElementById('coming-soon-section').style.display = 'none';
+        noResultsDiv.style.display = 'none';
 
-        // NEW: Date logic to determine current and next month
         const now = new Date();
+        currentRenderedMonthIndex = now.getMonth(); // Update current month tracker
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const currentMonthName = monthNames[now.getMonth()];
-        const nextMonthName = monthNames[(now.getMonth() + 1) % 12]; // % 12 handles December -> January wrap-around
+        const nextMonthName = monthNames[(now.getMonth() + 1) % 12]; 
 
         let filteredList = allItems;
         if (searchText) {
@@ -313,50 +472,97 @@ const firebaseConfig = {
             );
         }
 
+        // FEATURE: No Results Found State
+        if (filteredList.length === 0 && allItems.length > 0) {
+            noResultsDiv.style.display = 'block';
+            return;
+        }
+
+        let hasDaily = false, hasMonth = false, hasComing = false;
+
         filteredList.forEach(item => {
             const itemMonth = item.month || '';
 
             if (item.category === 'dailyUse') {
-                const cardEl = createCardElement(item, false); // Daily Use is never locked
+                const cardEl = createCardElement(item, false); 
                 dailyUseGrid.appendChild(cardEl);
+                hasDaily = true;
             } 
             else if (item.category === 'thisMonth' && itemMonth.toLowerCase() === currentMonthName.toLowerCase()) {
-                const cardEl = createCardElement(item, false); // Current month is not locked
+                const cardEl = createCardElement(item, false); 
                 thisMonthGrid.appendChild(cardEl);
+                hasMonth = true;
             }
             else if (item.category === 'comingSoon' || (item.category === 'thisMonth' && itemMonth.toLowerCase() === nextMonthName.toLowerCase())) {
-                const cardEl = createCardElement(item, true); // Next month or 'Coming Soon' category are locked
+                const cardEl = createCardElement(item, true); 
                 comingSoonGrid.appendChild(cardEl);
+                hasComing = true;
             }
         });
 
-        document.getElementById('this-month-section').style.display = thisMonthGrid.hasChildNodes() ? 'block' : 'none';
-        document.getElementById('daily-use-section').style.display = dailyUseGrid.hasChildNodes() ? 'block' : 'none';
-        document.getElementById('coming-soon-section').style.display = comingSoonGrid.hasChildNodes() ? 'block' : 'none';
+        // Show sections if they have content
+        if(hasDaily) document.getElementById('daily-use-section').style.display = 'block';
+        if(hasMonth) document.getElementById('this-month-section').style.display = 'block';
+        if(hasComing) document.getElementById('coming-soon-section').style.display = 'block';
+        
+        // Remove skeleton once data is rendered
+        skeletonContainer.style.display = 'none';
     }
 
     function renderHomepage() {
         mainContent.style.display = 'block'; 
         festivalViewer.style.display = 'none';
         renderAllCards(searchInput.value.toLowerCase().trim());
-        if (!searchInput.dataset.listener) {
-            searchInput.addEventListener('input', (e) => {
-                renderAllCards(e.target.value.toLowerCase().trim());
-            });
-            searchInput.dataset.listener = "true";
-        }
     }
 
+    // === INIT & DATA HANDLING ===
     async function main() {
-        allItems = await loadItemsFromFirestore();
-        const params = new URLSearchParams(window.location.search);
-        const festivalIdFromUrl = params.get('id');
-        if (festivalIdFromUrl) {
-            showFestival(festivalIdFromUrl);
-        } else {
-            renderHomepage();
+        // FEATURE: LocalStorage Caching (Load immediately if exists)
+        const cachedData = localStorage.getItem('festivalsData');
+        if (cachedData) {
+            try {
+                allItems = JSON.parse(cachedData);
+                // Wait small delay to ensure DOM is ready, then render cache
+                renderHomepage();
+            } catch (e) {
+                console.error("Cache parse error", e);
+            }
         }
+
+        // FEATURE: Real-time Listener (Replaces getDocs)
+        onSnapshot(collection(db, "festivals"), (snapshot) => {
+            allItems = snapshot.docs.map(doc => ({ ...doc.data() }));
+            
+            // Update Cache
+            localStorage.setItem('festivalsData', JSON.stringify(allItems));
+            
+            // Check URL for direct ID access (only on first load usually, but checking here ensures data exists)
+            const params = new URLSearchParams(window.location.search);
+            const festivalIdFromUrl = params.get('id');
+            
+            if (festivalIdFromUrl && !currentItemId) {
+                showFestival(festivalIdFromUrl);
+            } else if (!currentItemId) {
+                renderHomepage(); // Updates UI with new DB data
+            }
+        });
+
+        // FEATURE: Search Listener
+        searchInput.addEventListener('input', (e) => {
+            renderAllCards(e.target.value.toLowerCase().trim());
+        });
+
+        // FEATURE: Time Checker (Fixes the 11:59PM -> 12:00AM issue)
+        // Checks every 10 seconds if the month index changed
+        setInterval(() => {
+            const nowMonthIndex = new Date().getMonth();
+            if (nowMonthIndex !== currentRenderedMonthIndex) {
+                console.log("Month changed! Re-rendering...");
+                renderAllCards(searchInput.value.toLowerCase().trim());
+            }
+        }, 10000); 
     }
+
     main();
   </script>
 <script async="async" data-cfasync="false" src="https://pl26722301.effectivegatecpm.com/16e760128b8a492881b23188e0e0a0c2/invoke.js"></script>
