@@ -24,6 +24,8 @@
     .main-content {
       flex: 1;
       padding-bottom: 20px;
+      /* By default hidden, shown via JS only if NO ID in URL */
+      display: none; 
     }
 
     /* HEADER DESIGN */
@@ -77,7 +79,7 @@
     section {
       padding: 0 20px;
       margin-top: 30px;
-      display: none; /* Hidden by default, shown via JS */
+      display: none;
     }
 
     section h2 {
@@ -138,7 +140,7 @@
       margin-bottom: 10px;
       border-radius: 18px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-      background-color: #eee; /* Placeholder color before load */
+      background-color: #eee;
     }
 
     .card h3 {
@@ -192,7 +194,6 @@
         overflow: hidden;
     }
     
-    /* Shimmer Effect */
     .skeleton-img::after, .skeleton-text::after {
         content: "";
         position: absolute;
@@ -207,6 +208,33 @@
     @keyframes shimmer {
         0% { transform: translateX(-100%); }
         100% { transform: translateX(100%); }
+    }
+
+    /* DIRECT LINK LOADER (Spinner) */
+    /* This shows ONLY when opening a direct link to prevent white screen */
+    .direct-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #f8f9fc;
+        display: none; /* Hidden by default */
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+    }
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(118, 75, 162, 0.2);
+        border-top: 5px solid #764ba2;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     /* NO RESULTS STATE */
@@ -287,6 +315,11 @@
 </head>
 <body>
     
+  <!-- NEW: Simple spinner loader for direct links -->
+  <div id="direct-loader" class="direct-loader">
+      <div class="spinner"></div>
+  </div>
+
   <div class="main-content" id="mainContent">
     <header>
       <h1>World X Festival</h1>
@@ -295,7 +328,7 @@
       </div>
     </header>
 
-    <!-- SKELETON LOADING (Shown initially) -->
+    <!-- SKELETON LOADING (Shown initially on homepage only) -->
     <div id="skeleton-container" class="skeleton-wrapper">
         <div class="card-grid">
             <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div></div>
@@ -327,7 +360,7 @@
     </div>
 
     <footer class="app-footer">
-        <p>&copy; 2025 World X Festival.</p>
+        <p>&copy; 2025 World X Festival. All Rights Reserved.</p>
     </footer>
 
   </div>
@@ -338,7 +371,6 @@
   <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js" type="module"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    // ADDED: onSnapshot for Real-time updates
     import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
     
     const firebaseConfig = {
@@ -356,18 +388,22 @@
     const db = getFirestore(app);
     let allItems = [];
     let currentItemId = null;
-    let currentRenderedMonthIndex = new Date().getMonth(); // To track time changes
+    let currentRenderedMonthIndex = new Date().getMonth();
 
     const mainContent = document.getElementById('mainContent');
     const festivalViewer = document.getElementById('festivalViewer');
     const searchInput = document.getElementById('searchInput');
     const skeletonContainer = document.getElementById('skeleton-container');
     const noResultsDiv = document.getElementById('no-results');
+    const directLoader = document.getElementById('direct-loader');
 
-    // === VIEWER LOGIC ===
     const showFestival = (itemId) => {
         currentItemId = itemId;
         const itemData = allItems.find(item => item.id === itemId);
+        
+        // Hide global loader if it's active
+        directLoader.style.display = 'none';
+
         if (itemData && itemData.htmlContent) {
             let finalHtml = itemData.htmlContent;
             const params = new URLSearchParams(window.location.search);
@@ -396,6 +432,7 @@
             mainContent.style.display = 'none';
             festivalViewer.style.display = 'block';
         } else {
+            // Item not found, go to homepage
             renderHomepage();
         }
     };
@@ -418,11 +455,9 @@
         }
     });
 
-    // === CARD CREATION ===
     function createCardElement(item, isLocked = false) {
         const card = document.createElement('div');
         card.className = isLocked ? 'card locked' : 'card';
-        // FEATURE: Lazy Loading added
         card.innerHTML = `
             <div class="card-link" data-id="${item.id}">
                 <img src="${item.logoUrl || 'https://via.placeholder.com/100'}" 
@@ -440,25 +475,22 @@
         return card;
     }
 
-    // === RENDER LOGIC ===
     function renderAllCards(searchText = '') {
         const thisMonthGrid = document.getElementById('this-month-grid');
         const comingSoonGrid = document.getElementById('coming-soon-grid');
         const dailyUseGrid = document.getElementById('daily-use-grid');
         
-        // Clear previous content
         thisMonthGrid.innerHTML = '';
         comingSoonGrid.innerHTML = '';
         dailyUseGrid.innerHTML = '';
         
-        // Hide sections initially (to show No Results if needed)
         document.getElementById('this-month-section').style.display = 'none';
         document.getElementById('daily-use-section').style.display = 'none';
         document.getElementById('coming-soon-section').style.display = 'none';
         noResultsDiv.style.display = 'none';
 
         const now = new Date();
-        currentRenderedMonthIndex = now.getMonth(); // Update current month tracker
+        currentRenderedMonthIndex = now.getMonth(); 
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const currentMonthName = monthNames[now.getMonth()];
         const nextMonthName = monthNames[(now.getMonth() + 1) % 12]; 
@@ -472,7 +504,6 @@
             );
         }
 
-        // FEATURE: No Results Found State
         if (filteredList.length === 0 && allItems.length > 0) {
             noResultsDiv.style.display = 'block';
             return;
@@ -500,64 +531,65 @@
             }
         });
 
-        // Show sections if they have content
         if(hasDaily) document.getElementById('daily-use-section').style.display = 'block';
         if(hasMonth) document.getElementById('this-month-section').style.display = 'block';
         if(hasComing) document.getElementById('coming-soon-section').style.display = 'block';
         
-        // Remove skeleton once data is rendered
         skeletonContainer.style.display = 'none';
     }
 
     function renderHomepage() {
+        // Only show main content if we are NOT in a viewer mode or loading a direct link
+        directLoader.style.display = 'none';
         mainContent.style.display = 'block'; 
         festivalViewer.style.display = 'none';
         renderAllCards(searchInput.value.toLowerCase().trim());
     }
 
-    // === INIT & DATA HANDLING ===
     async function main() {
-        // FEATURE: LocalStorage Caching (Load immediately if exists)
-        const cachedData = localStorage.getItem('festivalsData');
-        if (cachedData) {
-            try {
-                allItems = JSON.parse(cachedData);
-                // Wait small delay to ensure DOM is ready, then render cache
-                renderHomepage();
-            } catch (e) {
-                console.error("Cache parse error", e);
+        // CHECK URL FIRST
+        const params = new URLSearchParams(window.location.search);
+        const festivalIdFromUrl = params.get('id');
+
+        // Logic: If there is an ID, show DIRECT LOADER. If not, show CACHED HOME.
+        if (festivalIdFromUrl) {
+            // Case 1: Direct Link - Show Loader, Hide Home
+            directLoader.style.display = 'flex';
+            mainContent.style.display = 'none';
+        } else {
+            // Case 2: Homepage - Check cache and render
+            const cachedData = localStorage.getItem('festivalsData');
+            if (cachedData) {
+                try {
+                    allItems = JSON.parse(cachedData);
+                    renderHomepage();
+                } catch (e) { console.error("Cache parse error", e); }
+            } else {
+                // If no cache and no ID, mainContent is hidden by CSS, but we need to show it to show Skeletons
+                mainContent.style.display = 'block';
             }
         }
 
-        // FEATURE: Real-time Listener (Replaces getDocs)
+        // Real-time Listener
         onSnapshot(collection(db, "festivals"), (snapshot) => {
             allItems = snapshot.docs.map(doc => ({ ...doc.data() }));
-            
-            // Update Cache
             localStorage.setItem('festivalsData', JSON.stringify(allItems));
             
-            // Check URL for direct ID access (only on first load usually, but checking here ensures data exists)
-            const params = new URLSearchParams(window.location.search);
-            const festivalIdFromUrl = params.get('id');
-            
+            // Check ID again inside the snapshot (in case it was the first load)
             if (festivalIdFromUrl && !currentItemId) {
                 showFestival(festivalIdFromUrl);
             } else if (!currentItemId) {
-                renderHomepage(); // Updates UI with new DB data
+                renderHomepage();
             }
         });
 
-        // FEATURE: Search Listener
         searchInput.addEventListener('input', (e) => {
             renderAllCards(e.target.value.toLowerCase().trim());
         });
 
-        // FEATURE: Time Checker (Fixes the 11:59PM -> 12:00AM issue)
-        // Checks every 10 seconds if the month index changed
         setInterval(() => {
             const nowMonthIndex = new Date().getMonth();
             if (nowMonthIndex !== currentRenderedMonthIndex) {
-                console.log("Month changed! Re-rendering...");
                 renderAllCards(searchInput.value.toLowerCase().trim());
             }
         }, 10000); 
@@ -565,17 +597,5 @@
 
     main();
   </script>
-<script async="async" data-cfasync="false" src="https://pl26722301.effectivegatecpm.com/16e760128b8a492881b23188e0e0a0c2/invoke.js"></script>
-<div id="container-16e760128b8a492881b23188e0e0a0c2"></div>
 </body>
-<script>
-  atOptions = {
-    'key' : 'a07a39e10a3bd9f27ae52751e4f94e88',
-    'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/a07a39e10a3bd9f27ae52751e4f94e88/invoke.js"></script>
 </html>
