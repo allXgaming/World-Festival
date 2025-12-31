@@ -24,7 +24,6 @@
     .main-content {
       flex: 1;
       padding-bottom: 20px;
-      /* By default hidden, shown via JS only if NO ID in URL */
       display: none; 
     }
 
@@ -210,32 +209,18 @@
         100% { transform: translateX(100%); }
     }
 
-    /* DIRECT LINK LOADER (Spinner) */
-    /* This shows ONLY when opening a direct link to prevent white screen */
+    /* DIRECT LINK LOADER (Pure White Screen) */
     .direct-loader {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: #f8f9fc;
+        background: #ffffff; /* Pure White */
         display: none; /* Hidden by default */
-        align-items: center;
-        justify-content: center;
         z-index: 2000;
     }
-    .spinner {
-        width: 50px;
-        height: 50px;
-        border: 5px solid rgba(118, 75, 162, 0.2);
-        border-top: 5px solid #764ba2;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
+    /* Removed .spinner class */
 
     /* NO RESULTS STATE */
     .no-results {
@@ -315,10 +300,8 @@
 </head>
 <body>
     
-  <!-- NEW: Simple spinner loader for direct links -->
-  <div id="direct-loader" class="direct-loader">
-      <div class="spinner"></div>
-  </div>
+  <!-- NEW: Simple WHITE BACKGROUND for direct links (No Spinner) -->
+  <div id="direct-loader" class="direct-loader"></div>
 
   <div class="main-content" id="mainContent">
     <header>
@@ -553,8 +536,8 @@
 
         // Logic: If there is an ID, show DIRECT LOADER. If not, show CACHED HOME.
         if (festivalIdFromUrl) {
-            // Case 1: Direct Link - Show Loader, Hide Home
-            directLoader.style.display = 'flex';
+            // Case 1: Direct Link - Show White Screen, Hide Home
+            directLoader.style.display = 'block';
             mainContent.style.display = 'none';
         } else {
             // Case 2: Homepage - Check cache and render
@@ -565,7 +548,6 @@
                     renderHomepage();
                 } catch (e) { console.error("Cache parse error", e); }
             } else {
-                // If no cache and no ID, mainContent is hidden by CSS, but we need to show it to show Skeletons
                 mainContent.style.display = 'block';
             }
         }
